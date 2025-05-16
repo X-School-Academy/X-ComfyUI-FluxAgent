@@ -58,7 +58,7 @@ We're moving from **"plan first, code later"** to **"prompt, flow, deploy."**
 
 ## 🧠 Why Workflow-Based AI Coding?
 
-Modern LLMs (like GPT-4 or Claude) can write code — but they struggle with **large or unstructured codebases**. Here's why:
+Modern LLMs (like ChatGPT, Claude or Gemini) can write code — but they struggle with **large or unstructured codebases**. Here's why:
 
 ### 🔍 AI Is Great at Small Tasks, Not Whole Projects
 
@@ -195,14 +195,43 @@ We welcome contributors of all backgrounds — no coding experience required.
 
 ---
 
+Here’s your **refined and organized roadmap** — grouped by phases and clarified with consistent phrasing to make it more readable, professional, and inspiring for contributors and users.
+
+---
+
 ## 🔭 Roadmap
 
-- [x] Export Python projects from workflow
-- [ ] Export to C, C++, and JavaScript
-- [ ] AI prompt helper for task generation
-- [ ] Node-to-CLI converters
-- [ ] Visual debugging + live AI feedback
-- [ ] Workflow collaboration & sharing features
+### 🚧 Phase 1: Core Foundation
+
+* [ ] Initialize the project structure and ComfyUI extension framework
+* [ ] Build the first **LLM Node** (prompt in, response out)
+* [ ] Add **CodeMirror Node** for in-node code viewing and editing
+
+### 🧠 Phase 2: Python Workflow Support
+
+* [ ] Enable LLM nodes to create new functional nodes via prompt (Python)
+* [ ] Export ComfyUI workflows as full **Python projects**
+
+### 🌐 Phase 3: Multi-language Expansion
+
+* [ ] Extend LLM node to support **C, C++, JavaScript** code generation
+* [ ] Enable workflow export to **C, C++, JavaScript** projects
+
+### 📱 Phase 4: UI & App Generation
+
+* [ ] Add nodes for **Web & Mobile UI components**
+* [ ] Export workflows as **Web & Mobile Applications**
+
+### 🔮 Phase 5: AI-Powered Developer Tools
+
+* [ ] Integrate **AI Prompt Helper** for guided task generation
+* [ ] Add **Node-to-CLI Converters** (generate terminal tools)
+* [ ] Implement **Visual Debugging** and **Live AI Feedback**
+
+### 🤝 Phase 6: Collaboration & Ecosystem
+
+* [ ] Enable **multi-user workflow collaboration**
+* [ ] Add **project sharing**, **import/export**, and **community node templates**
 
 ---
 
