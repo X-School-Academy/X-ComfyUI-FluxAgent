@@ -22,7 +22,7 @@ If you can think it, X-Comfy can flow it.
   *(Support for C, C++, JavaScript coming soon.)*
 
 - 🔁 **Beyond Coding**  
-  Automate daily tasks like file processing, email sorting, social media video creation and management, task generation — all within an AI-enhanced workflow.
+  Automate daily tasks like file processing, email sorting, task generation — all within an AI-enhanced workflow.
 
 ---
 
@@ -143,6 +143,25 @@ Unlike other closed workflow tools, this is your code, your model, your GPU — 
 - Automate business processes and personal tasks
 - Educate beginners in software development through visual learning
 - Prototype ideas faster than traditional coding
+
+---
+
+## 🎓 Learn by Vibe Coding + Vibe Learning
+
+We're not just building — we're teaching you how to do it with **Vibe Learning**, a new methodology for the AGI era.
+
+📖 Read the research paper:  
+**[Vibe Learning – A Future Learning Methodology in the AGI Era](https://github.com/X-School-Academy/Vibe-Learning-Reseach)**
+
+🎬 **YouTube Live Series**  
+Watch us build this entire project live, using step-by-step Vibe Coding.  
+🕘 **Live twice a week**: Tuesdays & Fridays, 9PM (Sydney/AU time)  
+▶️ Playlist: https://www.youtube.com/playlist?list=PL1rSmofNjIRH4rJq8tzA8a7gd6USySR4g  
+📌 **Subscribe to the Channel** for updates!
+
+💬 **Join Our Discord Community**  
+Ask questions, share ideas, contribute to the project.  
+🧠 Discord: [https://juniorit.ai/virtual-office](https://juniorit.ai/virtual-office)
 
 ---
 
