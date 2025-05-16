@@ -1,5 +1,7 @@
 # 🚀 X-ComfyUI-Extension
 
+[中文版](README_zh_CN.md)
+
 > **Transform ComfyUI into a Universal AI Vibe Coding Agent — From Code to Productivity Automation**
 
 **X-ComfyUI-Extension** turns ComfyUI into a smart, AI-powered agent capable of **building software**, **automating tasks**, and even **managing your daily workflows** — all with **natural language prompts**, no coding experience needed.

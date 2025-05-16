@@ -1,5 +1,7 @@
 # 🚀 X-ComfyUI-扩展
 
+[English Version](README.md)
+
 > **将 ComfyUI 转变为通用 AI Vibe 编码代理——从代码到生产力自动化**
 
 **X-ComfyUI-扩展** 将 ComfyUI 转变为智能的 AI 驱动代理，能够 **构建软件**、**自动化任务**，甚至 **管理您的日常工作流**——全部通过 **自然语言提示**，无需编码经验。
