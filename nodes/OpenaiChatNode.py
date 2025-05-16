@@ -45,7 +45,7 @@ class OpenAIChatnNode:
             Tuple containing the response text
         """
 
-        return ("Good!",)
+        #return ("Good!",)
         
         # Get API key from environment
         api_key = os.getenv("OPENAI_API_KEY")
