@@ -201,37 +201,62 @@ Here’s your **refined and organized roadmap** — grouped by phases and clarif
 
 ## 🔭 Roadmap
 
-### 🚧 Phase 1: Core Foundation
+#### 🚧 Phase 1: Core Foundation
 
 * [ ] Initialize the project structure and ComfyUI extension framework
 * [ ] Build the first **LLM Node** (prompt in, response out)
 * [ ] Add **CodeMirror Node** for in-node code viewing and editing
 
-### 🧠 Phase 2: Python Workflow Support
+#### 🧠 Phase 2: Python Workflow Support
 
 * [ ] Enable LLM nodes to create new functional nodes via prompt (Python)
 * [ ] Export ComfyUI workflows as full **Python projects**
 
-### 🌐 Phase 3: Multi-language Expansion
+---
+
+#### 🎨 Sample AI Workflows
+
+> Real-world use cases that demonstrate the power of X-ComfyUI
+
+* [ ] **AI-Powered Audiobook Generation Workflow**
+  Convert text into professional audiobooks using TTS and NLP nodes.
+
+* [ ] **YouTube Video Creation & Management Workflow**
+  Script → Voiceover → Thumbnail → Upload → AI title & tag generator.
+
+* [ ] **Two-Host AI Anime Podcast Video Workflow**
+  Auto-generate podcast episodes with AI voices, avatars, and synced subtitles.
+
+* [ ] **AI Anime Movie Creation Workflow**
+  From storyline + character design to scene-by-scene generation using AI.
+
+---
+
+#### 🌐 Phase 3: Multi-language Expansion
 
 * [ ] Extend LLM node to support **C, C++, JavaScript** code generation
 * [ ] Enable workflow export to **C, C++, JavaScript** projects
 
-### 📱 Phase 4: UI & App Generation
+#### 📱 Phase 4: UI & App Generation
 
 * [ ] Add nodes for **Web & Mobile UI components**
 * [ ] Export workflows as **Web & Mobile Applications**
 
-### 🔮 Phase 5: AI-Powered Developer Tools
+#### 🔮 Phase 5: AI-Powered Developer Tools
 
 * [ ] Integrate **AI Prompt Helper** for guided task generation
 * [ ] Add **Node-to-CLI Converters** (generate terminal tools)
 * [ ] Implement **Visual Debugging** and **Live AI Feedback**
 
-### 🤝 Phase 6: Collaboration & Ecosystem
+#### 🤝 Phase 6: Collaboration & Ecosystem
 
 * [ ] Enable **multi-user workflow collaboration**
 * [ ] Add **project sharing**, **import/export**, and **community node templates**
+
+---
+
+Let me know if you'd like to add links to demo videos or GitHub folders for each sample project as they’re developed!
+
 
 ---
 
