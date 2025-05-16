@@ -215,10 +215,6 @@ We welcome contributors of all backgrounds — no coding experience required.
 
 ---
 
-Here’s your **refined and organized roadmap** — grouped by phases and clarified with consistent phrasing to make it more readable, professional, and inspiring for contributors and users.
-
----
-
 ## 🔭 Roadmap
 
 #### 🚧 Phase 1: Core Foundation
@@ -272,11 +268,6 @@ Here’s your **refined and organized roadmap** — grouped by phases and clarif
 
 * [ ] Enable **multi-user workflow collaboration**
 * [ ] Add **project sharing**, **import/export**, and **community node templates**
-
----
-
-Let me know if you'd like to add links to demo videos or GitHub folders for each sample project as they’re developed!
-
 
 ---
 
