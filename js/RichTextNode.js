@@ -7,7 +7,7 @@ if (app) {
         name: "X-FluxAgent.RichTextNode", // Give your extension a unique name
         getCustomWidgets(app) {
             return {
-                "XX-FluxAgent.RichTextNode": (node, inputName, inputData, appRef) => {
+                "X-FluxAgent.RichTextNode": (node, inputName, inputData, appRef) => {
                     // Create a custom widget for the RichTextNode
                     const htmlElement = document.createElement("div");
 

@@ -21,7 +21,7 @@ class RichTextNode:
     FUNCTION = "process"
     CATEGORY = "X-FluxAgent"
 
-    def process(self, text_input, rich_text, node_id):
+    def process(self, text_input, node_id, rich_text = None):
         print(f"Processing text input for node_id: {node_id}")
         
         # data in ui is required to use array, node_id is a string, but it is number in js code
