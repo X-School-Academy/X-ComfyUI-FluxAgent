@@ -1,0 +1,15 @@
+[project]
+name = "x-fluxagent"
+description = "X-FluxAgent turns ComfyUI into a smart, AI-powered agent capable of building software, automating tasks, and even managing your daily workflows — all with natural language prompts, no coding experience needed."
+version = "1.0.0"
+license = {file = "LICENSE"}
+dependencies = ["python-dotenv", "requests"]
+
+[project.urls]
+Repository = "https://github.com/X-School-Academy/X-FluxAgent"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "X-FluxAgent"
+Icon = ""
