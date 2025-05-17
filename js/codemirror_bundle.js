@@ -1499,8 +1499,8 @@ var Facet = class _Facet {
   /**
   Define a new facet.
   */
-  static define(config2 = {}) {
-    return new _Facet(config2.combine || ((a) => a), config2.compareInput || ((a, b) => a === b), config2.compare || (!config2.combine ? sameArray : (a, b) => a === b), !!config2.static, config2.enables);
+  static define(config3 = {}) {
+    return new _Facet(config3.combine || ((a) => a), config3.compareInput || ((a, b) => a === b), config3.compare || (!config3.combine ? sameArray : (a, b) => a === b), !!config3.static, config3.enables);
   }
   /**
   Returns an extension that adds the given value to this facet.
@@ -1674,10 +1674,10 @@ var StateField = class _StateField {
   /**
   Define a state field.
   */
-  static define(config2) {
-    let field = new _StateField(nextID++, config2.create, config2.update, config2.compare || ((a, b) => a === b), config2);
-    if (config2.provide)
-      field.provides = config2.provide(field);
+  static define(config3) {
+    let field = new _StateField(nextID++, config3.create, config3.update, config3.compare || ((a, b) => a === b), config3);
+    if (config3.provide)
+      field.provides = config3.provide(field);
     return field;
   }
   create(state) {
@@ -2270,12 +2270,12 @@ function makeCategorizer(wordChars) {
   };
 }
 var EditorState = class _EditorState {
-  constructor(config2, doc2, selection, values2, computeSlot, tr) {
-    this.config = config2;
+  constructor(config3, doc2, selection, values2, computeSlot, tr) {
+    this.config = config3;
     this.doc = doc2;
     this.selection = selection;
     this.values = values2;
-    this.status = config2.statusTemplate.slice();
+    this.status = config3.statusTemplate.slice();
     this.computeSlot = computeSlot;
     if (tr)
       tr._state = this;
@@ -2446,7 +2446,7 @@ var EditorState = class _EditorState {
   to [`toJSON`](https://codemirror.net/6/docs/ref/#state.EditorState.toJSON) when serializing as
   third argument.
   */
-  static fromJSON(json, config2 = {}, fields) {
+  static fromJSON(json, config3 = {}, fields) {
     if (!json || typeof json.doc != "string")
       throw new RangeError("Invalid JSON representation for EditorState");
     let fieldInit = [];
@@ -2460,7 +2460,7 @@ var EditorState = class _EditorState {
     return _EditorState.create({
       doc: json.doc,
       selection: EditorSelection.fromJSON(json.selection),
-      extensions: config2.extensions ? fieldInit.concat([config2.extensions]) : fieldInit
+      extensions: config3.extensions ? fieldInit.concat([config3.extensions]) : fieldInit
     });
   }
   /**
@@ -2468,10 +2468,10 @@ var EditorState = class _EditorState {
   initializing an editor—updated states are created by applying
   transactions.
   */
-  static create(config2 = {}) {
-    let configuration = Configuration.resolve(config2.extensions || [], /* @__PURE__ */ new Map());
-    let doc2 = config2.doc instanceof Text ? config2.doc : Text.of((config2.doc || "").split(configuration.staticFacet(_EditorState.lineSeparator) || DefaultSplit));
-    let selection = !config2.selection ? EditorSelection.single(0) : config2.selection instanceof EditorSelection ? config2.selection : EditorSelection.single(config2.selection.anchor, config2.selection.head);
+  static create(config3 = {}) {
+    let configuration = Configuration.resolve(config3.extensions || [], /* @__PURE__ */ new Map());
+    let doc2 = config3.doc instanceof Text ? config3.doc : Text.of((config3.doc || "").split(configuration.staticFacet(_EditorState.lineSeparator) || DefaultSplit));
+    let selection = !config3.selection ? EditorSelection.single(0) : config3.selection instanceof EditorSelection ? config3.selection : EditorSelection.single(config3.selection.anchor, config3.selection.head);
     checkSelection(selection, doc2.length);
     if (!configuration.staticFacet(allowMultipleSelections))
       selection = selection.asSingle();
@@ -2607,9 +2607,9 @@ EditorState.transactionExtender = transactionExtender;
 Compartment.reconfigure = /* @__PURE__ */ StateEffect.define();
 function combineConfig(configs, defaults3, combine = {}) {
   let result = {};
-  for (let config2 of configs)
-    for (let key of Object.keys(config2)) {
-      let value = config2[key], current = result[key];
+  for (let config3 of configs)
+    for (let key of Object.keys(config3)) {
+      let value = config3[key], current = result[key];
       if (current === void 0)
         result[key] = value;
       else if (current === value || value === void 0) ;
@@ -10486,7 +10486,7 @@ var EditorView = class _EditorView {
   option, or put `view.dom` into your document after creating a
   view, so that the user can see the editor.
   */
-  constructor(config2 = {}) {
+  constructor(config3 = {}) {
     var _a2;
     this.plugins = [];
     this.pluginMap = /* @__PURE__ */ new Map();
@@ -10508,15 +10508,15 @@ var EditorView = class _EditorView {
     this.dom = document.createElement("div");
     this.dom.appendChild(this.announceDOM);
     this.dom.appendChild(this.scrollDOM);
-    if (config2.parent)
-      config2.parent.appendChild(this.dom);
-    let { dispatch } = config2;
-    this.dispatchTransactions = config2.dispatchTransactions || dispatch && ((trs) => trs.forEach((tr) => dispatch(tr, this))) || ((trs) => this.update(trs));
+    if (config3.parent)
+      config3.parent.appendChild(this.dom);
+    let { dispatch } = config3;
+    this.dispatchTransactions = config3.dispatchTransactions || dispatch && ((trs) => trs.forEach((tr) => dispatch(tr, this))) || ((trs) => this.update(trs));
     this.dispatch = this.dispatch.bind(this);
-    this._root = config2.root || getRoot(config2.parent) || document;
-    this.viewState = new ViewState(config2.state || EditorState.create(config2));
-    if (config2.scrollTo && config2.scrollTo.is(scrollIntoView))
-      this.viewState.scrollTarget = config2.scrollTo.value.clip(this.viewState.state);
+    this._root = config3.root || getRoot(config3.parent) || document;
+    this.viewState = new ViewState(config3.state || EditorState.create(config3));
+    if (config3.scrollTo && config3.scrollTo.is(scrollIntoView))
+      this.viewState.scrollTarget = config3.scrollTo.value.clip(this.viewState.state);
     this.plugins = this.state.facet(viewPlugin).map((spec) => new PluginInstance(spec));
     for (let plugin of this.plugins)
       plugin.update(this);
@@ -11804,10 +11804,10 @@ var LayerView = class {
   }
 };
 var layerOrder = /* @__PURE__ */ Facet.define();
-function layer(config2) {
+function layer(config3) {
   return [
-    ViewPlugin.define((v) => new LayerView(v, config2)),
-    layerOrder.of(config2)
+    ViewPlugin.define((v) => new LayerView(v, config3)),
+    layerOrder.of(config3)
   ];
 }
 var selectionConfig = /* @__PURE__ */ Facet.define({
@@ -11821,9 +11821,9 @@ var selectionConfig = /* @__PURE__ */ Facet.define({
     });
   }
 });
-function drawSelection(config2 = {}) {
+function drawSelection(config3 = {}) {
   return [
-    selectionConfig.of(config2),
+    selectionConfig.of(config3),
     cursorLayer,
     selectionLayer,
     hideNativeSelection,
@@ -12008,8 +12008,8 @@ var MatchDecorator = class {
   /**
   Create a decorator.
   */
-  constructor(config2) {
-    const { regexp, decoration, decorate, boundary, maxLength = 1e3 } = config2;
+  constructor(config3) {
+    const { regexp, decoration, decorate, boundary, maxLength = 1e3 } = config3;
     if (!regexp.global)
       throw new RangeError("The regular expression given to MatchDecorator should have its 'g' flag set");
     this.regexp = regexp;
@@ -12129,20 +12129,20 @@ function supportsTabSize() {
 }
 var specialCharConfig = /* @__PURE__ */ Facet.define({
   combine(configs) {
-    let config2 = combineConfig(configs, {
+    let config3 = combineConfig(configs, {
       render: null,
       specialChars: Specials,
       addSpecialChars: null
     });
-    if (config2.replaceTabs = !supportsTabSize())
-      config2.specialChars = new RegExp("	|" + config2.specialChars.source, UnicodeRegexpSupport);
-    if (config2.addSpecialChars)
-      config2.specialChars = new RegExp(config2.specialChars.source + "|" + config2.addSpecialChars.source, UnicodeRegexpSupport);
-    return config2;
+    if (config3.replaceTabs = !supportsTabSize())
+      config3.specialChars = new RegExp("	|" + config3.specialChars.source, UnicodeRegexpSupport);
+    if (config3.addSpecialChars)
+      config3.specialChars = new RegExp(config3.specialChars.source + "|" + config3.addSpecialChars.source, UnicodeRegexpSupport);
+    return config3;
   }
 });
-function highlightSpecialChars(config2 = {}) {
-  return [specialCharConfig.of(config2), specialCharPlugin()];
+function highlightSpecialChars(config3 = {}) {
+  return [specialCharConfig.of(config3), specialCharPlugin()];
 }
 var _plugin = null;
 function specialCharPlugin() {
@@ -12454,9 +12454,9 @@ var tooltipPlugin = /* @__PURE__ */ ViewPlugin.fromClass(class {
     this.madeAbsolute = false;
     this.lastTransaction = 0;
     this.measureTimeout = -1;
-    let config2 = view.state.facet(tooltipConfig);
-    this.position = config2.position;
-    this.parent = config2.parent;
+    let config3 = view.state.facet(tooltipConfig);
+    this.position = config3.position;
+    this.parent = config3.parent;
     this.classes = view.themeClasses;
     this.createContainer();
     this.measureReq = { read: this.readMeasure.bind(this), write: this.writeMeasure.bind(this), key: this };
@@ -13224,17 +13224,17 @@ var defaults = {
   domEventHandlers: {}
 };
 var activeGutters = /* @__PURE__ */ Facet.define();
-function gutter(config2) {
-  return [gutters(), activeGutters.of(Object.assign(Object.assign({}, defaults), config2))];
+function gutter(config3) {
+  return [gutters(), activeGutters.of(Object.assign(Object.assign({}, defaults), config3))];
 }
 var unfixGutters = /* @__PURE__ */ Facet.define({
   combine: (values2) => values2.some((x) => x)
 });
-function gutters(config2) {
+function gutters(config3) {
   let result = [
     gutterView
   ];
-  if (config2 && config2.fixed === false)
+  if (config3 && config3.fixed === false)
     result.push(unfixGutters.of(true));
   return result;
 }
@@ -13413,14 +13413,14 @@ var UpdateContext = class {
   }
 };
 var SingleGutterView = class {
-  constructor(view, config2) {
+  constructor(view, config3) {
     this.view = view;
-    this.config = config2;
+    this.config = config3;
     this.elements = [];
     this.spacer = null;
     this.dom = document.createElement("div");
     this.dom.className = "cm-gutter" + (this.config.class ? " " + this.config.class : "");
-    for (let prop in config2.domEventHandlers) {
+    for (let prop in config3.domEventHandlers) {
       this.dom.addEventListener(prop, (event) => {
         let target = event.target, y;
         if (target != this.dom && this.dom.contains(target)) {
@@ -13432,13 +13432,13 @@ var SingleGutterView = class {
           y = event.clientY;
         }
         let line = view.lineBlockAtHeight(y - view.documentTop);
-        if (config2.domEventHandlers[prop](view, line, event))
+        if (config3.domEventHandlers[prop](view, line, event))
           event.preventDefault();
       });
     }
-    this.markers = asArray2(config2.markers(view));
-    if (config2.initialSpacer) {
-      this.spacer = new GutterElement(view, 0, 0, [config2.initialSpacer(view)]);
+    this.markers = asArray2(config3.markers(view));
+    if (config3.initialSpacer) {
+      this.spacer = new GutterElement(view, 0, 0, [config3.initialSpacer(view)]);
       this.dom.appendChild(this.spacer.dom);
       this.spacer.dom.style.cssText += "visibility: hidden; pointer-events: none";
     }
@@ -13590,9 +13590,9 @@ var lineNumberGutter = /* @__PURE__ */ activeGutters.compute([lineNumberConfig],
   },
   domEventHandlers: state.facet(lineNumberConfig).domEventHandlers
 }));
-function lineNumbers(config2 = {}) {
+function lineNumbers(config3 = {}) {
   return [
-    lineNumberConfig.of(config2),
+    lineNumberConfig.of(config3),
     gutters(),
     lineNumberGutter
   ];
@@ -13637,10 +13637,10 @@ var NodeProp = class {
   /**
   Create a new node prop type.
   */
-  constructor(config2 = {}) {
+  constructor(config3 = {}) {
     this.id = nextPropID++;
-    this.perNode = !!config2.perNode;
-    this.deserialize = config2.deserialize || (() => {
+    this.perNode = !!config3.perNode;
+    this.deserialize = config3.deserialize || (() => {
       throw new Error("This node type doesn't define a deserialize function");
     });
   }
@@ -13985,8 +13985,8 @@ var Tree = class _Tree {
   which may have children grouped into subtrees with type
   [`NodeType.none`](#common.NodeType^none).
   */
-  balance(config2 = {}) {
-    return this.children.length <= 8 ? this : balanceRange(NodeType.none, this.children, this.positions, 0, this.children.length, 0, this.length, (children, positions, length) => new _Tree(this.type, children, positions, length, this.propValues), config2.makeTree || ((children, positions, length) => new _Tree(NodeType.none, children, positions, length)));
+  balance(config3 = {}) {
+    return this.children.length <= 8 ? this : balanceRange(NodeType.none, this.children, this.positions, 0, this.children.length, 0, this.length, (children, positions, length) => new _Tree(this.type, children, positions, length, this.propValues), config3.makeTree || ((children, positions, length) => new _Tree(NodeType.none, children, positions, length)));
   }
   /**
   Build a tree from a postfix-ordered buffer of node information,
@@ -15725,8 +15725,8 @@ var Modifier = class _Modifier {
     let configs = powerSet(mods);
     for (let parent of base2.set)
       if (!parent.modified.length)
-        for (let config2 of configs)
-          set.push(_Modifier.get(parent, config2));
+        for (let config3 of configs)
+          set.push(_Modifier.get(parent, config3));
     return tag;
   }
 };
@@ -17450,10 +17450,10 @@ var foldConfig = /* @__PURE__ */ Facet.define({
     return combineConfig(values2, defaultConfig);
   }
 });
-function codeFolding(config2) {
+function codeFolding(config3) {
   let result = [foldState, baseTheme$12];
-  if (config2)
-    result.push(foldConfig.of(config2));
+  if (config3)
+    result.push(foldConfig.of(config3));
   return result;
 }
 function widgetToDOM(view, prepared) {
@@ -17500,9 +17500,9 @@ var foldGutterDefaults = {
   foldingChanged: () => false
 };
 var FoldMarker = class extends GutterMarker {
-  constructor(config2, open) {
+  constructor(config3, open) {
     super();
-    this.config = config2;
+    this.config = config3;
     this.open = open;
   }
   eq(other) {
@@ -17517,8 +17517,8 @@ var FoldMarker = class extends GutterMarker {
     return span;
   }
 };
-function foldGutter(config2 = {}) {
-  let fullConfig = Object.assign(Object.assign({}, foldGutterDefaults), config2);
+function foldGutter(config3 = {}) {
+  let fullConfig = Object.assign(Object.assign({}, foldGutterDefaults), config3);
   let canFold = new FoldMarker(fullConfig, true), canUnfold = new FoldMarker(fullConfig, false);
   let markers = ViewPlugin.fromClass(class {
     constructor(view) {
@@ -17800,13 +17800,13 @@ var bracketMatchingState = /* @__PURE__ */ StateField.define({
     if (!tr.docChanged && !tr.selection)
       return deco;
     let decorations2 = [];
-    let config2 = tr.state.facet(bracketMatchingConfig);
+    let config3 = tr.state.facet(bracketMatchingConfig);
     for (let range of tr.state.selection.ranges) {
       if (!range.empty)
         continue;
-      let match = matchBrackets(tr.state, range.head, -1, config2) || range.head > 0 && matchBrackets(tr.state, range.head - 1, 1, config2) || config2.afterCursor && (matchBrackets(tr.state, range.head, 1, config2) || range.head < tr.state.doc.length && matchBrackets(tr.state, range.head + 1, -1, config2));
+      let match = matchBrackets(tr.state, range.head, -1, config3) || range.head > 0 && matchBrackets(tr.state, range.head - 1, 1, config3) || config3.afterCursor && (matchBrackets(tr.state, range.head, 1, config3) || range.head < tr.state.doc.length && matchBrackets(tr.state, range.head + 1, -1, config3));
       if (match)
-        decorations2 = decorations2.concat(config2.renderMatch(match, tr.state));
+        decorations2 = decorations2.concat(config3.renderMatch(match, tr.state));
     }
     return Decoration.set(decorations2, true);
   },
@@ -17816,8 +17816,8 @@ var bracketMatchingUnique = [
   bracketMatchingState,
   baseTheme2
 ];
-function bracketMatching(config2 = {}) {
-  return [bracketMatchingConfig.of(config2), bracketMatchingUnique];
+function bracketMatching(config3 = {}) {
+  return [bracketMatchingConfig.of(config3), bracketMatchingUnique];
 }
 var bracketMatchingHandle = /* @__PURE__ */ new NodeProp();
 function matchingNodes(node, dir, brackets) {
@@ -17835,8 +17835,8 @@ function findHandle(node) {
   let hasHandle = node.type.prop(bracketMatchingHandle);
   return hasHandle ? hasHandle(node.node) : node;
 }
-function matchBrackets(state, pos, dir, config2 = {}) {
-  let maxScanDistance = config2.maxScanDistance || DefaultScanDist, brackets = config2.brackets || DefaultBrackets;
+function matchBrackets(state, pos, dir, config3 = {}) {
+  let maxScanDistance = config3.maxScanDistance || DefaultScanDist, brackets = config3.brackets || DefaultBrackets;
   let tree = syntaxTree(state), node = tree.resolveInner(pos, dir);
   for (let cur2 = node; cur2; cur2 = cur2.parent) {
     let matches = matchingNodes(cur2.type, dir, brackets);
@@ -17974,8 +17974,8 @@ var marks = {
 
 // node_modules/@codemirror/commands/dist/index.js
 var toggleComment = (target) => {
-  let { state } = target, line = state.doc.lineAt(state.selection.main.from), config2 = getConfig(target.state, line.from);
-  return config2.line ? toggleLineComment(target) : config2.block ? toggleBlockCommentByLine(target) : false;
+  let { state } = target, line = state.doc.lineAt(state.selection.main.from), config3 = getConfig(target.state, line.from);
+  return config3.line ? toggleLineComment(target) : config3.block ? toggleBlockCommentByLine(target) : false;
 };
 function command(f, option) {
   return ({ state, dispatch }) => {
@@ -18149,13 +18149,13 @@ var historyField_ = /* @__PURE__ */ StateField.define({
     return HistoryState.empty;
   },
   update(state, tr) {
-    let config2 = tr.state.facet(historyConfig);
+    let config3 = tr.state.facet(historyConfig);
     let fromHist = tr.annotation(fromHistory);
     if (fromHist) {
       let item = HistEvent.fromTransaction(tr, fromHist.selection), from = fromHist.side;
       let other = from == 0 ? state.undone : state.done;
       if (item)
-        other = updateBranch(other, other.length, config2.minDepth, item);
+        other = updateBranch(other, other.length, config3.minDepth, item);
       else
         other = addSelection(other, tr.startState.selection);
       return new HistoryState(from == 0 ? fromHist.rest : other, from == 0 ? other : fromHist.rest);
@@ -18168,9 +18168,9 @@ var historyField_ = /* @__PURE__ */ StateField.define({
     let event = HistEvent.fromTransaction(tr);
     let time = tr.annotation(Transaction.time), userEvent = tr.annotation(Transaction.userEvent);
     if (event)
-      state = state.addChanges(event, time, userEvent, config2, tr);
+      state = state.addChanges(event, time, userEvent, config3, tr);
     else if (tr.selection)
-      state = state.addSelection(tr.startState.selection, time, userEvent, config2.newGroupDelay);
+      state = state.addSelection(tr.startState.selection, time, userEvent, config3.newGroupDelay);
     if (isolate == "full" || isolate == "after")
       state = state.isolate();
     return state;
@@ -18182,10 +18182,10 @@ var historyField_ = /* @__PURE__ */ StateField.define({
     return new HistoryState(json.done.map(HistEvent.fromJSON), json.undone.map(HistEvent.fromJSON));
   }
 });
-function history(config2 = {}) {
+function history(config3 = {}) {
   return [
     historyField_,
-    historyConfig.of(config2),
+    historyConfig.of(config3),
     EditorView.domEventHandlers({
       beforeinput(e, view) {
         let command2 = e.inputType == "historyUndo" ? undo : e.inputType == "historyRedo" ? redo : null;
@@ -18337,13 +18337,13 @@ var HistoryState = class _HistoryState {
   isolate() {
     return this.prevTime ? new _HistoryState(this.done, this.undone) : this;
   }
-  addChanges(event, time, userEvent, config2, tr) {
+  addChanges(event, time, userEvent, config3, tr) {
     let done = this.done, lastEvent = done[done.length - 1];
-    if (lastEvent && lastEvent.changes && !lastEvent.changes.empty && event.changes && (!userEvent || joinableUserEvent.test(userEvent)) && (!lastEvent.selectionsAfter.length && time - this.prevTime < config2.newGroupDelay && config2.joinToEvent(tr, isAdjacent(lastEvent.changes, event.changes)) || // For compose (but not compose.start) events, always join with previous event
+    if (lastEvent && lastEvent.changes && !lastEvent.changes.empty && event.changes && (!userEvent || joinableUserEvent.test(userEvent)) && (!lastEvent.selectionsAfter.length && time - this.prevTime < config3.newGroupDelay && config3.joinToEvent(tr, isAdjacent(lastEvent.changes, event.changes)) || // For compose (but not compose.start) events, always join with previous event
     userEvent == "input.type.compose")) {
-      done = updateBranch(done, done.length - 1, config2.minDepth, new HistEvent(event.changes.compose(lastEvent.changes), conc(StateEffect.mapEffects(event.effects, lastEvent.changes), lastEvent.effects), lastEvent.mapped, lastEvent.startSelection, none2));
+      done = updateBranch(done, done.length - 1, config3.minDepth, new HistEvent(event.changes.compose(lastEvent.changes), conc(StateEffect.mapEffects(event.effects, lastEvent.changes), lastEvent.effects), lastEvent.mapped, lastEvent.startSelection, none2));
     } else {
-      done = updateBranch(done, done.length, config2.minDepth, event);
+      done = updateBranch(done, done.length, config3.minDepth, event);
     }
     return new _HistoryState(done, none2, time, userEvent);
   }
@@ -19570,15 +19570,15 @@ var SearchQuery = class {
   /**
   Create a query object.
   */
-  constructor(config2) {
-    this.search = config2.search;
-    this.caseSensitive = !!config2.caseSensitive;
-    this.literal = !!config2.literal;
-    this.regexp = !!config2.regexp;
-    this.replace = config2.replace || "";
+  constructor(config3) {
+    this.search = config3.search;
+    this.caseSensitive = !!config3.caseSensitive;
+    this.literal = !!config3.literal;
+    this.regexp = !!config3.regexp;
+    this.replace = config3.replace || "";
     this.valid = !!this.search && (!this.regexp || validRegExp(this.search));
     this.unquoted = this.unquote(this.search);
-    this.wholeWord = !!config2.wholeWord;
+    this.wholeWord = !!config3.wholeWord;
   }
   /**
   @internal
@@ -19817,10 +19817,10 @@ var findNext = /* @__PURE__ */ searchCommand((view, { query }) => {
   if (!next)
     return false;
   let selection = EditorSelection.single(next.from, next.to);
-  let config2 = view.state.facet(searchConfigFacet);
+  let config3 = view.state.facet(searchConfigFacet);
   view.dispatch({
     selection,
-    effects: [announceMatch(view, next), config2.scrollToMatch(selection.main, view)],
+    effects: [announceMatch(view, next), config3.scrollToMatch(selection.main, view)],
     userEvent: "select.search"
   });
   selectSearchInput(view);
@@ -19832,10 +19832,10 @@ var findPrevious = /* @__PURE__ */ searchCommand((view, { query }) => {
   if (!prev)
     return false;
   let selection = EditorSelection.single(prev.from, prev.to);
-  let config2 = view.state.facet(searchConfigFacet);
+  let config3 = view.state.facet(searchConfigFacet);
   view.dispatch({
     selection,
-    effects: [announceMatch(view, prev), config2.scrollToMatch(selection.main, view)],
+    effects: [announceMatch(view, prev), config3.scrollToMatch(selection.main, view)],
     userEvent: "select.search"
   });
   selectSearchInput(view);
@@ -19926,13 +19926,13 @@ function defaultQuery(state, fallback) {
   let selText = sel.empty || sel.to > sel.from + 100 ? "" : state.sliceDoc(sel.from, sel.to);
   if (fallback && !selText)
     return fallback;
-  let config2 = state.facet(searchConfigFacet);
+  let config3 = state.facet(searchConfigFacet);
   return new SearchQuery({
-    search: ((_a2 = fallback === null || fallback === void 0 ? void 0 : fallback.literal) !== null && _a2 !== void 0 ? _a2 : config2.literal) ? selText : selText.replace(/\n/g, "\\n"),
-    caseSensitive: (_b = fallback === null || fallback === void 0 ? void 0 : fallback.caseSensitive) !== null && _b !== void 0 ? _b : config2.caseSensitive,
-    literal: (_c = fallback === null || fallback === void 0 ? void 0 : fallback.literal) !== null && _c !== void 0 ? _c : config2.literal,
-    regexp: (_d = fallback === null || fallback === void 0 ? void 0 : fallback.regexp) !== null && _d !== void 0 ? _d : config2.regexp,
-    wholeWord: (_e = fallback === null || fallback === void 0 ? void 0 : fallback.wholeWord) !== null && _e !== void 0 ? _e : config2.wholeWord
+    search: ((_a2 = fallback === null || fallback === void 0 ? void 0 : fallback.literal) !== null && _a2 !== void 0 ? _a2 : config3.literal) ? selText : selText.replace(/\n/g, "\\n"),
+    caseSensitive: (_b = fallback === null || fallback === void 0 ? void 0 : fallback.caseSensitive) !== null && _b !== void 0 ? _b : config3.caseSensitive,
+    literal: (_c = fallback === null || fallback === void 0 ? void 0 : fallback.literal) !== null && _c !== void 0 ? _c : config3.literal,
+    regexp: (_d = fallback === null || fallback === void 0 ? void 0 : fallback.regexp) !== null && _d !== void 0 ? _d : config3.regexp,
+    wholeWord: (_e = fallback === null || fallback === void 0 ? void 0 : fallback.wholeWord) !== null && _e !== void 0 ? _e : config3.wholeWord
   });
 }
 function getSearchInput(view) {
@@ -20517,9 +20517,9 @@ function defaultPositionInfo(view, list, option, info, space5, tooltip) {
     class: "cm-completionInfo-" + (narrow ? rtl ? "left-narrow" : "right-narrow" : left ? "left" : "right")
   };
 }
-function optionContent(config2) {
-  let content2 = config2.addToOptions.slice();
-  if (config2.icons)
+function optionContent(config3) {
+  let content2 = config3.addToOptions.slice();
+  if (config3.icons)
     content2.push({
       render(completion) {
         let icon = document.createElement("div");
@@ -20591,11 +20591,11 @@ var CompletionTooltip = class {
     this.currentClass = "";
     let cState = view.state.field(stateField);
     let { options, selected } = cState.open;
-    let config2 = view.state.facet(completionConfig);
-    this.optionContent = optionContent(config2);
-    this.optionClass = config2.optionClass;
-    this.tooltipClass = config2.tooltipClass;
-    this.range = rangeAroundSelected(options.length, selected, config2.maxRenderedOptions);
+    let config3 = view.state.facet(completionConfig);
+    this.optionContent = optionContent(config3);
+    this.optionClass = config3.optionClass;
+    this.tooltipClass = config3.tooltipClass;
+    this.range = rangeAroundSelected(options.length, selected, config3.maxRenderedOptions);
     this.dom = document.createElement("div");
     this.dom.className = "cm-tooltip-autocomplete";
     this.updateTooltipClass(view.state);
@@ -21841,8 +21841,8 @@ function handleClose(state, _open, close) {
     userEvent: "input.type"
   });
 }
-function handleSame(state, token, allowTriple, config2) {
-  let stringPrefixes = config2.stringPrefixes || defaults2.stringPrefixes;
+function handleSame(state, token, allowTriple, config3) {
+  let stringPrefixes = config3.stringPrefixes || defaults2.stringPrefixes;
   let dont = null, changes = state.changeByRange((range) => {
     if (!range.empty)
       return {
@@ -21924,11 +21924,11 @@ function canStartStringAt(state, pos, prefixes) {
   }
   return -1;
 }
-function autocompletion(config2 = {}) {
+function autocompletion(config3 = {}) {
   return [
     commitCharacters,
     completionState,
-    completionConfig.of(config2),
+    completionConfig.of(config3),
     completionPlugin,
     completionKeymapExt,
     baseTheme4
@@ -24166,25 +24166,25 @@ var LRParser = class _LRParser extends Parser {
   given settings modified. Settings not provided in `config` are
   kept from the original parser.
   */
-  configure(config2) {
+  configure(config3) {
     let copy = Object.assign(Object.create(_LRParser.prototype), this);
-    if (config2.props)
-      copy.nodeSet = this.nodeSet.extend(...config2.props);
-    if (config2.top) {
-      let info = this.topRules[config2.top];
+    if (config3.props)
+      copy.nodeSet = this.nodeSet.extend(...config3.props);
+    if (config3.top) {
+      let info = this.topRules[config3.top];
       if (!info)
-        throw new RangeError(`Invalid top rule name ${config2.top}`);
+        throw new RangeError(`Invalid top rule name ${config3.top}`);
       copy.top = info;
     }
-    if (config2.tokenizers)
+    if (config3.tokenizers)
       copy.tokenizers = this.tokenizers.map((t2) => {
-        let found = config2.tokenizers.find((r) => r.from == t2);
+        let found = config3.tokenizers.find((r) => r.from == t2);
         return found ? found.to : t2;
       });
-    if (config2.specializers) {
+    if (config3.specializers) {
       copy.specializers = this.specializers.slice();
       copy.specializerSpecs = this.specializerSpecs.map((s, i) => {
-        let found = config2.specializers.find((r) => r.from == s.external);
+        let found = config3.specializers.find((r) => r.from == s.external);
         if (!found)
           return s;
         let spec = Object.assign(Object.assign({}, s), { external: found.to });
@@ -24192,16 +24192,16 @@ var LRParser = class _LRParser extends Parser {
         return spec;
       });
     }
-    if (config2.contextTracker)
-      copy.context = config2.contextTracker;
-    if (config2.dialect)
-      copy.dialect = this.parseDialect(config2.dialect);
-    if (config2.strict != null)
-      copy.strict = config2.strict;
-    if (config2.wrap)
-      copy.wrappers = copy.wrappers.concat(config2.wrap);
-    if (config2.bufferLength != null)
-      copy.bufferLength = config2.bufferLength;
+    if (config3.contextTracker)
+      copy.context = config3.contextTracker;
+    if (config3.dialect)
+      copy.dialect = this.parseDialect(config3.dialect);
+    if (config3.strict != null)
+      copy.strict = config3.strict;
+    if (config3.wrap)
+      copy.wrappers = copy.wrappers.concat(config3.wrap);
+    if (config3.bufferLength != null)
+      copy.bufferLength = config3.bufferLength;
     return copy;
   }
   /**
@@ -24737,9 +24737,9 @@ var tsxLanguage = /* @__PURE__ */ javascriptLanguage.configure({
 var kwCompletion = (name2) => ({ label: name2, type: "keyword" });
 var keywords = /* @__PURE__ */ "break case const continue default delete export extends false finally in instanceof let new return static super switch this throw true typeof var yield".split(" ").map(kwCompletion);
 var typescriptKeywords = /* @__PURE__ */ keywords.concat(/* @__PURE__ */ ["declare", "implements", "private", "protected", "public"].map(kwCompletion));
-function javascript(config2 = {}) {
-  let lang = config2.jsx ? config2.typescript ? tsxLanguage : jsxLanguage : config2.typescript ? typescriptLanguage : javascriptLanguage;
-  let completions = config2.typescript ? typescriptSnippets.concat(typescriptKeywords) : snippets.concat(keywords);
+function javascript(config3 = {}) {
+  let lang = config3.jsx ? config3.typescript ? tsxLanguage : jsxLanguage : config3.typescript ? typescriptLanguage : javascriptLanguage;
+  let completions = config3.typescript ? typescriptSnippets.concat(typescriptKeywords) : snippets.concat(keywords);
   return new LanguageSupport(lang, [
     javascriptLanguage.data.of({
       autocomplete: ifNotIn(dontComplete, completeFromList(completions))
@@ -24747,7 +24747,7 @@ function javascript(config2 = {}) {
     javascriptLanguage.data.of({
       autocomplete: localCompletionSource
     }),
-    config2.jsx ? autoCloseTags : []
+    config3.jsx ? autoCloseTags : []
   ]);
 }
 function findOpenTag(node) {
@@ -26528,15 +26528,15 @@ var MarkdownParser = class _MarkdownParser extends Parser {
   Reconfigure the parser.
   */
   configure(spec) {
-    let config2 = resolveConfig(spec);
-    if (!config2)
+    let config3 = resolveConfig(spec);
+    if (!config3)
       return this;
     let { nodeSet, skipContextMarkup } = this;
     let blockParsers = this.blockParsers.slice(), leafBlockParsers = this.leafBlockParsers.slice(), blockNames = this.blockNames.slice(), inlineParsers = this.inlineParsers.slice(), inlineNames = this.inlineNames.slice(), endLeafBlock = this.endLeafBlock.slice(), wrappers = this.wrappers;
-    if (nonEmpty(config2.defineNodes)) {
+    if (nonEmpty(config3.defineNodes)) {
       skipContextMarkup = Object.assign({}, skipContextMarkup);
       let nodeTypes2 = nodeSet.types.slice(), styles;
-      for (let s of config2.defineNodes) {
+      for (let s of config3.defineNodes) {
         let { name: name2, block, composite, style } = typeof s == "string" ? { name: s } : s;
         if (nodeTypes2.some((t2) => t2.name == name2))
           continue;
@@ -26562,10 +26562,10 @@ var MarkdownParser = class _MarkdownParser extends Parser {
       if (styles)
         nodeSet = nodeSet.extend(styleTags(styles));
     }
-    if (nonEmpty(config2.props))
-      nodeSet = nodeSet.extend(...config2.props);
-    if (nonEmpty(config2.remove)) {
-      for (let rm2 of config2.remove) {
+    if (nonEmpty(config3.props))
+      nodeSet = nodeSet.extend(...config3.props);
+    if (nonEmpty(config3.remove)) {
+      for (let rm2 of config3.remove) {
         let block = this.blockNames.indexOf(rm2), inline = this.inlineNames.indexOf(rm2);
         if (block > -1)
           blockParsers[block] = leafBlockParsers[block] = void 0;
@@ -26573,8 +26573,8 @@ var MarkdownParser = class _MarkdownParser extends Parser {
           inlineParsers[inline] = void 0;
       }
     }
-    if (nonEmpty(config2.parseBlock)) {
-      for (let spec2 of config2.parseBlock) {
+    if (nonEmpty(config3.parseBlock)) {
+      for (let spec2 of config3.parseBlock) {
         let found = blockNames.indexOf(spec2.name);
         if (found > -1) {
           blockParsers[found] = spec2.parse;
@@ -26589,8 +26589,8 @@ var MarkdownParser = class _MarkdownParser extends Parser {
           endLeafBlock.push(spec2.endLeaf);
       }
     }
-    if (nonEmpty(config2.parseInline)) {
-      for (let spec2 of config2.parseInline) {
+    if (nonEmpty(config3.parseInline)) {
+      for (let spec2 of config3.parseInline) {
         let found = inlineNames.indexOf(spec2.name);
         if (found > -1) {
           inlineParsers[found] = spec2.parse;
@@ -26601,8 +26601,8 @@ var MarkdownParser = class _MarkdownParser extends Parser {
         }
       }
     }
-    if (config2.wrap)
-      wrappers = wrappers.concat(config2.wrap);
+    if (config3.wrap)
+      wrappers = wrappers.concat(config3.wrap);
     return new _MarkdownParser(nodeSet, blockParsers, leafBlockParsers, blockNames, endLeafBlock, skipContextMarkup, inlineParsers, inlineNames, wrappers);
   }
   /**
@@ -27309,8 +27309,8 @@ function leftOverSpace(node, from, to) {
   }
   return ranges;
 }
-function parseCode(config2) {
-  let { codeParser, htmlParser } = config2;
+function parseCode(config3) {
+  let { codeParser, htmlParser } = config3;
   let wrap = parseMixed((node, input) => {
     let id2 = node.type.id;
     if (codeParser && (id2 == Type.CodeBlock || id2 == Type.FencedCode)) {
@@ -29528,8 +29528,8 @@ function htmlCompletionFor(schema, context) {
 function htmlCompletionSource(context) {
   return htmlCompletionFor(Schema.default, context);
 }
-function htmlCompletionSourceWith(config2) {
-  let { extraTags, extraGlobalAttributes: extraAttrs } = config2;
+function htmlCompletionSourceWith(config3) {
+  let { extraTags, extraGlobalAttributes: extraAttrs } = config3;
   let schema = extraAttrs || extraTags ? new Schema(extraTags, extraAttrs) : Schema.default;
   return (context) => htmlCompletionFor(schema, context);
 }
@@ -29629,18 +29629,18 @@ var htmlPlain = /* @__PURE__ */ LRLanguage.define({
 var htmlLanguage = /* @__PURE__ */ htmlPlain.configure({
   wrap: /* @__PURE__ */ configureNesting(defaultNesting, defaultAttrs)
 });
-function html(config2 = {}) {
+function html(config3 = {}) {
   let dialect = "", wrap;
-  if (config2.matchClosingTags === false)
+  if (config3.matchClosingTags === false)
     dialect = "noMatch";
-  if (config2.selfClosingTags === true)
+  if (config3.selfClosingTags === true)
     dialect = (dialect ? dialect + " " : "") + "selfClosing";
-  if (config2.nestedLanguages && config2.nestedLanguages.length || config2.nestedAttributes && config2.nestedAttributes.length)
-    wrap = configureNesting((config2.nestedLanguages || []).concat(defaultNesting), (config2.nestedAttributes || []).concat(defaultAttrs));
+  if (config3.nestedLanguages && config3.nestedLanguages.length || config3.nestedAttributes && config3.nestedAttributes.length)
+    wrap = configureNesting((config3.nestedLanguages || []).concat(defaultNesting), (config3.nestedAttributes || []).concat(defaultAttrs));
   let lang = wrap ? htmlPlain.configure({ wrap, dialect }) : dialect ? htmlLanguage.configure({ dialect }) : htmlLanguage;
   return new LanguageSupport(lang, [
-    htmlLanguage.data.of({ autocomplete: htmlCompletionSourceWith(config2) }),
-    config2.autoCloseTags !== false ? autoCloseTags2 : [],
+    htmlLanguage.data.of({ autocomplete: htmlCompletionSourceWith(config3) }),
+    config3.autoCloseTags !== false ? autoCloseTags2 : [],
     javascript().support,
     css().support
   ]);
@@ -30019,11 +30019,11 @@ var markdownKeymap = [
   { key: "Backspace", run: deleteMarkupBackward }
 ];
 var htmlNoMatch = /* @__PURE__ */ html({ matchClosingTags: false });
-function markdown(config2 = {}) {
-  let { codeLanguages, defaultCodeLanguage, addKeymap = true, base: { parser: parser6 } = commonmarkLanguage, completeHTMLTags = true, htmlTagLanguage = htmlNoMatch } = config2;
+function markdown(config3 = {}) {
+  let { codeLanguages, defaultCodeLanguage, addKeymap = true, base: { parser: parser6 } = commonmarkLanguage, completeHTMLTags = true, htmlTagLanguage = htmlNoMatch } = config3;
   if (!(parser6 instanceof MarkdownParser))
     throw new RangeError("Base parser provided to `markdown` should be a Markdown parser");
-  let extensions = config2.extensions ? [config2.extensions] : [];
+  let extensions = config3.extensions ? [config3.extensions] : [];
   let support = [htmlTagLanguage.support], defaultCode;
   if (defaultCodeLanguage instanceof LanguageSupport) {
     support.push(defaultCodeLanguage.support);
@@ -30066,6 +30066,119 @@ function htmlTagCompletions() {
 }
 
 // src/index.js
+var config2 = {
+  name: "dracula",
+  dark: true,
+  background: "#282A36",
+  foreground: "#F8F8F2",
+  selection: "#ef4146",
+  selectionMatch: "#ef414644",
+  cursor: "#F8F8F2",
+  dropdownBackground: "#282A36",
+  dropdownBorder: "#191A21",
+  activeLine: "#44475A00",
+  matchingBracket: "#ef4146",
+  keyword: "#FF79C6",
+  storage: "#FF79C6",
+  variable: "#F8F8F2",
+  parameter: "#F8F8F2",
+  function: "#50FA7B",
+  string: "#F1FA8C",
+  constant: "#BD93F9",
+  type: "#8BE9FD",
+  class: "#8BE9FD",
+  number: "#BD93F9",
+  comment: "#909cc3",
+  heading: "#BD93F9",
+  invalid: "#FF5555",
+  regexp: "#F1FA8C"
+};
+var _draculaTheme = EditorView.theme({
+  "&": {
+    color: config2.foreground,
+    backgroundColor: config2.background,
+    height: "100%",
+    width: "100%"
+  },
+  ".cm-scroller": {
+    overflow: "auto"
+  },
+  ".cm-content": { caretColor: config2.cursor },
+  ".cm-cursor, .cm-dropCursor": { borderLeftColor: config2.cursor },
+  "&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection": { backgroundColor: config2.selection + " !important" },
+  ".cm-panels": { backgroundColor: config2.dropdownBackground, color: config2.foreground },
+  ".cm-panels.cm-panels-top": { borderBottom: "2px solid black" },
+  ".cm-panels.cm-panels-bottom": { borderTop: "2px solid black" },
+  ".cm-searchMatch": {
+    backgroundColor: config2.dropdownBackground,
+    outline: `1px solid ${config2.dropdownBorder}`
+  },
+  ".cm-searchMatch.cm-searchMatch-selected": {
+    backgroundColor: config2.selectionMatch
+  },
+  ".cm-activeLine": { backgroundColor: config2.activeLine, border: "1px dotted #44475A" },
+  ".cm-selectionMatch": { backgroundColor: config2.selectionMatch },
+  "&.cm-focused .cm-matchingBracket, &.cm-focused .cm-nonmatchingBracket": {
+    backgroundColor: config2.matchingBracket,
+    outline: "none"
+  },
+  ".cm-gutters": {
+    backgroundColor: config2.background,
+    color: config2.foreground,
+    border: "none"
+  },
+  ".cm-activeLineGutter": { backgroundColor: config2.background },
+  ".cm-foldPlaceholder": {
+    backgroundColor: "transparent",
+    border: "none",
+    color: config2.foreground
+  },
+  ".cm-tooltip": {
+    border: `1px solid ${config2.dropdownBorder}`,
+    backgroundColor: config2.dropdownBackground,
+    color: config2.foreground
+  },
+  ".cm-tooltip .cm-tooltip-arrow:before": {
+    borderTopColor: "transparent",
+    borderBottomColor: "transparent"
+  },
+  ".cm-tooltip .cm-tooltip-arrow:after": {
+    borderTopColor: config2.foreground,
+    borderBottomColor: config2.foreground
+  },
+  ".cm-tooltip-autocomplete": {
+    "& > ul > li[aria-selected]": {
+      background: config2.selection,
+      color: config2.foreground
+    }
+  }
+}, { dark: config2.dark });
+var _draculaHighlightStyle = HighlightStyle.define([
+  { tag: tags.keyword, color: config2.keyword },
+  { tag: [tags.name, tags.deleted, tags.character, tags.macroName], color: config2.variable },
+  { tag: [tags.propertyName], color: config2.function },
+  { tag: [tags.processingInstruction, tags.string, tags.inserted, tags.special(tags.string)], color: config2.string },
+  { tag: [tags.function(tags.variableName), tags.labelName], color: config2.function },
+  { tag: [tags.color, tags.constant(tags.name), tags.standard(tags.name)], color: config2.constant },
+  { tag: [tags.definition(tags.name), tags.separator], color: config2.variable },
+  { tag: [tags.className], color: config2.class },
+  { tag: [tags.number, tags.changed, tags.annotation, tags.modifier, tags.self, tags.namespace], color: config2.number },
+  { tag: [tags.typeName], color: config2.type, fontStyle: config2.type },
+  { tag: [tags.operator, tags.operatorKeyword], color: config2.keyword },
+  { tag: [tags.url, tags.escape, tags.regexp, tags.link], color: config2.regexp },
+  { tag: [tags.meta, tags.comment], color: config2.comment },
+  { tag: tags.strong, fontWeight: "bold" },
+  { tag: tags.emphasis, fontStyle: "italic" },
+  { tag: tags.link, textDecoration: "underline" },
+  { tag: tags.heading, fontWeight: "bold", color: config2.heading },
+  { tag: [tags.atom, tags.bool, tags.special(tags.variableName)], color: config2.variable },
+  { tag: tags.invalid, color: config2.invalid },
+  { tag: tags.strikethrough, textDecoration: "line-through" }
+]);
+var theme2 = [
+  _draculaTheme,
+  syntaxHighlighting(_draculaHighlightStyle)
+];
 function createRichEditor(parent, initialContent = "", options = {}) {
   const { onUpdate, language: language2, showLineNumbers } = options;
   const updateListener2 = EditorView.updateListener.of((update) => {
@@ -30077,18 +30190,17 @@ function createRichEditor(parent, initialContent = "", options = {}) {
     basicSetup,
     EditorView.lineWrapping,
     history(),
+    bracketMatching(),
+    foldGutter(),
+    indentOnInput(),
+    syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+    highlightActiveLineGutter(),
+    highlightSpecialChars(),
+    dropCursor(),
+    rectangularSelection(),
+    crosshairCursor(),
     keymap.of([indentWithTab]),
-    updateListener2,
-    // Add CSS to make the editor fill its container
-    EditorView.theme({
-      "&": {
-        height: "100%",
-        width: "100%"
-      },
-      ".cm-scroller": {
-        overflow: "auto"
-      }
-    })
+    updateListener2
   ];
   if (language2 == "python") {
     extensions.push(python());
@@ -30100,6 +30212,7 @@ function createRichEditor(parent, initialContent = "", options = {}) {
   if (showLineNumbers) {
     extensions.push(lineNumbers());
   }
+  extensions.push(theme2);
   return new EditorView({
     doc: initialContent,
     extensions,
