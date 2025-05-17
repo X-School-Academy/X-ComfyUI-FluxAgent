@@ -12,7 +12,7 @@ class RichTextNode:
                     }),
                 },
                 "optional": {
-                    "rich_text": ("X-ComfyUI.RichTextNode", {"default": "Your code", "readOnly": True}),
+                    "rich_text": ("X-FluxAgent.RichTextNode", {"default": "Your code", "readOnly": True}),
                 },
                 "hidden": {
                     "node_id": "UNIQUE_ID"
@@ -22,7 +22,7 @@ class RichTextNode:
 
     RETURN_TYPES = ("STRING",)
     FUNCTION = "process"
-    CATEGORY = "X-ComfyUI"
+    CATEGORY = "X-FluxAgent"
 
     def process(self, text_input, rich_text, node_id):
         print(f"Processing text input for node_id: {node_id}")
@@ -32,10 +32,10 @@ class RichTextNode:
 
 # Register the node
 NODE_CLASS_MAPPINGS = {
-    "X-ComfyUI.RichTextNode": RichTextNode
+    "X-FluxAgent.RichTextNode": RichTextNode
 }
 
 # Set a display name for the node
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "X-ComfyUI.RichTextNode": "Rich Text Node"
+    "XX-FluxAgent.RichTextNode": "Rich Text Node"
 }

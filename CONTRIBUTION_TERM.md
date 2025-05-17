@@ -1,6 +1,6 @@
-# Contributor License Agreement (CLA) for X-ComfyUI-Extension
+# Contributor License Agreement (CLA) for X-FluxAgent
 
-Thank you for considering contributing to **X-ComfyUI-Extension**.
+Thank you for considering contributing to **X-FluxAgent**.
 
 By submitting a contribution (code, documentation, issue suggestions, etc.), you agree to the following terms:
 

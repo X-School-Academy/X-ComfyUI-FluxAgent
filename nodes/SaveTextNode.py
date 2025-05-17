@@ -25,7 +25,7 @@ class SaveTextNode:
     
     RETURN_TYPES = () 
     FUNCTION = "save_string"
-    CATEGORY = "X-ComfyUI"  # Category the node appears under in UI
+    CATEGORY = "X-FluxAgent"  # Category the node appears under in UI
     OUTPUT_NODE = True  # Indicates this is an output node
     
     def save_string(self, text, filename, append, subfolder=""):
@@ -56,9 +56,9 @@ class SaveTextNode:
 
 # Register the node in ComfyUI
 NODE_CLASS_MAPPINGS = {
-    "X-ComfyUI.SaveTextNode": SaveTextNode
+    "X-FluxAgent.SaveTextNode": SaveTextNode
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "X-ComfyUI.SaveTextNode": "Save Text To File"
+    "X-FluxAgent.SaveTextNode": "Save Text To File"
 }

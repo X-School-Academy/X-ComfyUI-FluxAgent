@@ -30,7 +30,7 @@ class OpenAIChatnNode:
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("string",)
     FUNCTION = "chat_completion"
-    CATEGORY = "X-ComfyUI"
+    CATEGORY = "X-FluxAgent"
     
     def chat_completion(self, model, user, system=None):
         """
@@ -121,9 +121,9 @@ class OpenAIChatnNode:
 
 # Node registration
 NODE_CLASS_MAPPINGS = {
-    "X-ComfyUI.OpenAIChatnNode": OpenAIChatnNode
+    "X-FluxAgent.OpenAIChatnNode": OpenAIChatnNode
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "X-ComfyUI.OpenAIChatnNode": "OpenAI Chat Node"
+    "X-FluxAgent.OpenAIChatnNode": "OpenAI Chat Node"
 }
