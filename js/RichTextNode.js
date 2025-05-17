@@ -144,6 +144,25 @@ if (app) {
             // which is usually the class name of your Python node.
             if (nodeData.name === "X-FluxAgent.RichTextNode") {
                 console.log("Registering X-FluxAgent.RichTextNode extension");
+
+                // Set default size
+                const originalOnCreated = nodeType.prototype.onNodeCreated;
+                
+                // Override the onNodeCreated method
+                nodeType.prototype.onNodeCreated = function() {
+                    // Call the original onNodeCreated if it exists
+                    if (originalOnCreated) {
+                        originalOnCreated.apply(this, arguments);
+                    }
+                    
+                    // Set initial width and height [width, height]
+                    this.size = [400, 300]; 
+                    
+                    // Optional: set minimum size
+                    this.computeSize = function() {
+                        return [400, 300]; // Minimum size [width, height]
+                    };
+                };
                 
                 // In your node's JavaScript
                 nodeType.prototype.onExecuted = function(details) {
