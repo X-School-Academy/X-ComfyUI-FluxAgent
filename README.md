@@ -1,10 +1,10 @@
-# 🚀 X-ComfyUI-Extension
+# 🚀 X-ComfyUI-FluxAgent
 
 [中文版](README_zh_CN.md)
 
 > **Transform ComfyUI into a Universal AI Vibe Coding Agent — From Code to Productivity Automation**
 
-**X-ComfyUI-Extension** turns ComfyUI into a smart, AI-powered agent capable of **building software**, **automating tasks**, and even **managing your daily workflows** — all with **natural language prompts**, no coding experience needed.
+**X-ComfyUI-FluxAgent** turns ComfyUI into a smart, AI-powered agent capable of **building software**, **automating tasks**, and even **managing your daily workflows** — all with **natural language prompts**, no coding experience needed.
 
 The **"X"** stands for **anything** — not just images and videos — but **code generation**, **automation**, **apps**, **agents**, and more.  
 If you can think it, X-Comfy can flow it.
@@ -45,7 +45,7 @@ You just need ideas — X-Comfy takes care of the rest.
 
 ## ⚔️ UML vs AI Workflow: Old School vs AI Vibe
 
-| Concept            | UML (Traditional Coding)         | AI Workflow (X-ComfyUI-Extension)     |
+| Concept            | UML (Traditional Coding)         | AI Workflow (X-ComfyUI-FluxAgent)     |
 |--------------------|----------------------------------|----------------------------------------|
 | Designer Role      | Software architect               | Anyone with an idea                    |
 | Coding Skill Needed| High                             | None                                   |
@@ -132,7 +132,7 @@ Unlike other closed workflow tools, this is your code, your model, your GPU — 
 | Local GPU Support           | ✅ Yes                    | ❌ Cloud-only or limited     |
 | Fully Open Source           | ✅ Yes                    | ⚠️ Often proprietary         |
 | Custom Node Support         | ✅ Plug-and-play          | ⚠️ Limited or not available  |
-| Exportable to Real Code     | ✅ With X-Comfy Extension | ❌ Usually locked-in         |
+| Exportable to Real Code     | ✅ With X-ComfyUI-FluxAgent | ❌ Usually locked-in         |
 | Ideal for LLMs & Diffusion  | ✅ Optimized              | ⚠️ Often limited to presets  |
 | Transparent Data Flow       | ✅ Full visibility        | ❌ Abstracted or hidden      |
 
@@ -142,7 +142,7 @@ Absolutely! Here's the **updated "🛠 Use Cases"** section of your `README.md` 
 
 ## 🛠 Use Cases
 
-Whether you're building tools, apps, content, or agents — **X-ComfyUI-Extension** turns your ideas into reality with the help of AI and modular workflows.
+Whether you're building tools, apps, content, or agents — **X-ComfyUI-FluxAgent** turns your ideas into reality with the help of AI and modular workflows.
 
 #### 🔧 General Use Cases
 
@@ -221,7 +221,7 @@ We welcome contributors of all backgrounds — no coding experience required.
 
 #### 🚧 Phase 1: Core Foundation
 
-* [ ] Initialize the project structure and ComfyUI extension framework
+* [ ] Initialize the project structure and X-ComfyUI-FluxAgent framework
 * [ ] Build the first **LLM Node** (prompt in, response out)
 * [ ] Add **CodeMirror Node** for in-node code viewing and editing
 
