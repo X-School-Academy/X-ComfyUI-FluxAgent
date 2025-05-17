@@ -1,4 +1,4 @@
-# 🚀 X-FluxAgent for ComfyUI
+# 🚀 X-FluxAgent
 
 [中文版](README_zh_CN.md)
 
