@@ -3,11 +3,12 @@ import {createRichEditor} from "./codemirror_bundle.js"
 
 // Ensure the app is available
 if (app) {
+    let nodeName = "X-FluxAgent.RichTextNode";
     app.registerExtension({
-        name: "X-FluxAgent.RichTextNode", // Give your extension a unique name
+        name: nodeName, // Give your extension a unique name
         getCustomWidgets(app) {
             return {
-                "X-FluxAgent.RichTextNode": (node, inputName, inputData, appRef) => {
+                [nodeName]: (node, inputName, inputData, appRef) => {
                     // Create a custom widget for the RichTextNode
                     const htmlElement = document.createElement("div");
 
@@ -142,7 +143,7 @@ if (app) {
             // Check if this is the node definition for 'ExampleNode'
             // The 'nodeData.name' is the name ComfyUI uses internally,
             // which is usually the class name of your Python node.
-            if (nodeData.name === "X-FluxAgent.RichTextNode") {
+            if (nodeData.name === nodeName) {
                 console.log("Registering X-FluxAgent.RichTextNode extension");
 
                 // Set default size
