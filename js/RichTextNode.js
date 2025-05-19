@@ -10,14 +10,14 @@ if (app) {
             // The 'nodeData.name' is the name ComfyUI uses internally,
             // which is usually the class name of your Python node.
             if (nodeData.name === nodeName) {
-                console.log("Registering X-FluxAgent.RichTextNode extension");
+                console.log("Registering X-FluxAgent.RichTextNode");
 
                 // Set default size
                 const originalOnCreated = nodeType.prototype.onNodeCreated;
                 
                 // Override the onNodeCreated method
                 nodeType.prototype.onNodeCreated = function() {
-                    console.log(`[RichTextNode_LOG] onNodeCreated for ${nodeName} (ID: ${this.id})`);
+
                     // Call the original onNodeCreated if it exists
                     if (originalOnCreated) {
                         originalOnCreated.apply(this, arguments);

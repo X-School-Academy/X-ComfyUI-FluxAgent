@@ -3,8 +3,10 @@ class AICodeGenNode:
     @classmethod
     def INPUT_TYPES(s):
         return {
-            "required": {},
-            "optional": {},
+            "required": {
+            },
+            "optional": {
+            },
             "hidden": {
                 "node_id": "UNIQUE_ID",
                 "prompt": "PROMPT", 

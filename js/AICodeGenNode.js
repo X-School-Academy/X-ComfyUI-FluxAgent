@@ -9,9 +9,7 @@ class AICodeGenNode {
         this.config = {
             input: [],
             output: [{ name: "result", type: "string" }],
-            docs: ""
         };
-        this.configFile = 'ai_codegen_node_config.json';
     }
 
     // Placeholder: Load configuration from backend
@@ -26,10 +24,10 @@ class AICodeGenNode {
             // }
 
             // Placeholder: Load from localStorage for now
-            const savedConfig = localStorage.getItem('ai_codegen_node_config');
-            if (savedConfig) {
-                this.config = JSON.parse(savedConfig);
-            }
+            //const savedConfig = localStorage.getItem('ai_codegen_node_config');
+            //if (savedConfig) {
+            //    this.config = JSON.parse(savedConfig);
+            //}
         } catch (error) {
             console.log('Using default config:', error);
         }
@@ -53,7 +51,7 @@ class AICodeGenNode {
             // }
 
             // Placeholder: Save to localStorage for now
-            localStorage.setItem('ai_codegen_node_config', JSON.stringify(config));
+            //localStorage.setItem('ai_codegen_node_config', JSON.stringify(config));
             this.config = config;
             this.updateNodeStructure(); // Calls updateNodeStructure which will use this.comfyNode
             return true;
@@ -131,7 +129,6 @@ class AICodeGenNode {
                 <div class="modal-tabs">
                     <button class="tab-button active" data-tab="input">Input</button>
                     <button class="tab-button" data-tab="output">Output</button>
-                    <button class="tab-button" data-tab="docs">Docs</button>
                 </div>
 
                 <div class="modal-content">
@@ -143,23 +140,6 @@ class AICodeGenNode {
                     <div id="output-fields" class="field-list">
                         <div id="output-container"></div>
                         <button class="add-field-button" data-type="output">+ Add Output Field</button>
-                    </div>
-
-                    <div id="docs-fields" class="field-list">
-                        <div class="docs-container">
-                            <label for="docs-textarea" class="docs-label">Documentation & Comments</label>
-                            <textarea
-                                id="docs-textarea"
-                                class="docs-textarea"
-                                placeholder="Add documentation, comments, or notes about the inputs and outputs here...
-
-This can include:
-- Field descriptions
-- Usage examples
-- Parameter constraints
-- Expected behavior"
-                            ></textarea>
-                        </div>
                     </div>
                 </div>
 
@@ -373,42 +353,6 @@ This can include:
                     background-color: #45a049;
                 }
 
-                .docs-container {
-                    padding: 10px 0;
-                }
-
-                .docs-label {
-                    display: block;
-                    margin-bottom: 10px;
-                    font-size: 14px;
-                    font-weight: 500;
-                    color: #cccccc;
-                }
-
-                .docs-textarea {
-                    width: 100%;
-                    min-height: 300px; /* Ensure it's tall enough */
-                    padding: 15px;
-                    background-color: #444444;
-                    border: 1px solid #666666;
-                    border-radius: 6px;
-                    color: #ffffff;
-                    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-                    font-size: 14px;
-                    line-height: 1.5;
-                    resize: vertical;
-                    outline: none;
-                    box-sizing: border-box;
-                }
-
-                .docs-textarea:focus {
-                    border-color: #007acc;
-                    box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
-                }
-
-                .docs-textarea::placeholder {
-                    color: #888888;
-                }
             `;
             document.head.appendChild(styles);
         }
@@ -434,9 +378,6 @@ This can include:
             outputContainer.appendChild(fieldElement);
         });
 
-        // Populate docs
-        const docsTextarea = modal.querySelector('#docs-textarea');
-        docsTextarea.value = this.config.docs || '';
     }
 
     // Create field element
@@ -567,8 +508,7 @@ This can include:
     collectModalData(modal) {
         const config = {
             input: [],
-            output: [],
-            docs: modal.querySelector('#docs-textarea').value
+            output: []
         };
 
         // Collect input fields
@@ -655,6 +595,7 @@ app.registerExtension({
     name: nodeName,
     async beforeRegisterNodeDef(nodeType, nodeData, appInstance) { // Renamed app to appInstance to avoid conflict
         if (nodeData.name === nodeName) {
+            console.log("Registering X-FluxAgent.AICodeGenNode");
             const onNodeCreated = nodeType.prototype.onNodeCreated;
             nodeType.prototype.onNodeCreated = function () { // 'this' is the ComfyUI node instance
                 const result = onNodeCreated?.apply(this, arguments);
@@ -666,11 +607,12 @@ app.registerExtension({
                 const manageWidget = this.addWidget(
                     "button",
                     "manage_inputs_outputs",
-                    "Manage Inputs/Outputs", // Button text
+                    "Manage Inputs/Outputs",
                     () => {
                         this.aiCodeGenNode.openConfigModal();
                     }
                 );
+                manageWidget.label = "Manage Inputs/Outputs";
                 // Ensure the widget is associated with this node instance if needed by ComfyUI's internals
                 manageWidget.node = this;
 
