@@ -1,4 +1,4 @@
-#setup
+# Setup
 
 ```bash
 mkdir codemirror_bundler
@@ -20,7 +20,7 @@ npm install --save-dev esbuild
   }
 ````
 
-## build and use src/codemirror_bundle.js into your in your project
+## Build and use src/codemirror_bundle.js into your in your project
 
 ```bash
 npm run build
