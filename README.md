@@ -29,6 +29,10 @@ Here’s an example of what this visual workflow might look like for an AI-power
 
 (In this demo, you can see modules for the story input, scene generation, image creation, audio creation, and finally, video creation.)
 
+![X-FluxAgent Demo config](./assets/demo-cfg.png)
+
+(The system will automatically generate all necessary inputs, outputs, and connections for your workflow. However, you have the flexibility to make manual adjustments to these elements before proceeding to code generation.)
+
 #### Step 3: AI Generates the Building Blocks (Code & Nodes) 🧱➡️💻
 
 Once you're happy with the visual plan, X-FluxAgent gets to work. It translates each module in the workflow into the necessary code and creates the corresponding nodes within ComfyUI. You can then run this workflow just like any standard ComfyUI workflow, seeing your project come to life.
