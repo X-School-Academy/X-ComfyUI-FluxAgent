@@ -30125,7 +30125,8 @@ var _draculaTheme = EditorView.theme({
   ".cm-gutters": {
     backgroundColor: config2.background,
     color: config2.foreground,
-    border: "none"
+    border: "none",
+    display: "none"
   },
   ".cm-activeLineGutter": { backgroundColor: config2.background },
   ".cm-foldPlaceholder": {

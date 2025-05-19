@@ -69,7 +69,8 @@ const _draculaTheme = EditorView.theme({
   '.cm-gutters': {
     backgroundColor: config.background,
     color: config.foreground,
-    border: 'none'
+    border: 'none',
+    display: 'none',
   },
   '.cm-activeLineGutter': { backgroundColor: config.background },
   '.cm-foldPlaceholder': {
@@ -155,6 +156,7 @@ export function createRichEditor(parent, initialContent = "", options = {}) {
   }
 
   if (showLineNumbers) {
+    // lineNumbers is not working, and quick fix by set .cm-gutters to none in the theme
     extensions.push(lineNumbers());
   }
 
