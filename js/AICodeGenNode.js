@@ -74,9 +74,19 @@ class AICodeGenNode {
 
         const config = this.config;
 
-        // Clear existing inputs and outputs (except the management button)
-        const manageWidget = targetNode.widgets?.find(w => w.name === "manage_inputs_outputs");
-        targetNode.widgets = manageWidget ? [manageWidget] : [];
+        const preservedWidgets = [];
+        const existingWidgets = targetNode.widgets || [];
+
+        const manageButton = existingWidgets.find(w => w.name === "manage_inputs_outputs");
+        if (manageButton) {
+            preservedWidgets.push(manageButton);
+        }
+
+        const richTextWidgetInstance = existingWidgets.find(w => w.name === "rich_text");
+        if (richTextWidgetInstance) {
+            preservedWidgets.push(richTextWidgetInstance);
+        }
+        targetNode.widgets = preservedWidgets;
 
         // Clear inputs/outputs
         targetNode.inputs = [];
@@ -627,7 +637,13 @@ app.registerExtension({
                     console.warn('Failed to load initial config for AICodeGenNode:', error);
                 });
 
-                return result;
+                // Set initial width and height [width, height]
+                this.size = [300, 200]; 
+                
+                // Optional: set minimum size
+                this.computeSize = function() {
+                    return [300, 200]; // Minimum size [width, height]
+                };
             };
 
             // Handle serialization
