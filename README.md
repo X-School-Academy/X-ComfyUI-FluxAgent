@@ -11,6 +11,34 @@ If you can think it, X-Comfy can flow it.
 
 ---
 
+## How X-FluxAgent Works: Your Ideas to Reality in 4 Steps
+
+X-FluxAgent simplifies turning your concepts into working applications or automated tasks. Here’s a straightforward look at the process:
+
+#### Step 1: Describe Your Goal 📝
+
+Simply tell X-FluxAgent what you want to create or automate. This could be anything from "build a tool to summarize articles" to "automate sending a welcome email to new subscribers." You define the project in natural language.
+
+#### Step 2: Visualize the Plan (AI Creates a Workflow Diagram) 🗺️
+
+Based on your description, X-FluxAgent automatically generates a visual workflow, similar to a UML diagram. This diagram shows each step (or "module") of your project, including what information goes in (inputs), what tasks each module performs (its "prompt"), and what comes out (outputs). You can review, update and understand the entire process at a glance.
+
+Here’s an example of what this visual workflow might look like for an AI-powered audiobook generator:
+
+![X-FluxAgent Demo](./assets/demo.png)
+
+(In this demo, you can see modules for the story input, scene generation, image creation, audio creation, and finally, video creation.)
+
+#### Step 3: AI Generates the Building Blocks (Code & Nodes) 🧱➡️💻
+
+Once you're happy with the visual plan, X-FluxAgent gets to work. It translates each module in the workflow into the necessary code and creates the corresponding nodes within ComfyUI. You can then run this workflow just like any standard ComfyUI workflow, seeing your project come to life.
+
+#### Step 4: Launch Your Creation (Export as a Standalone Project) 🚀
+
+The magic doesn't stop in ComfyUI. X-FluxAgent allows you to export the entire workflow as a complete, standalone project. This means you can run your creation independently, without needing ComfyUI, making it easy to share or deploy your new tool or application.
+
+---
+
 ## ✨ What It Does
 
 - 🧠 **AI Agent from ComfyUI Nodes**  
