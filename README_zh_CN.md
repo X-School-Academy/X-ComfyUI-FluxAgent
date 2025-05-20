@@ -204,13 +204,13 @@ X-FluxAgent 简化了将您的概念转化为实际应用程序或自动化任�
 
 * YouTube 中英文全程直播实战如何开发本项目: 
 
-中文实战直播 [https://www.youtube.com/@ai-coding-frank/streams]()
-英文实战直播 [https://www.youtube.com/@junior-it-ai/streams]()
+- 中文实战直播 [https://www.youtube.com/@ai-coding-frank/streams]()
+- 英文实战直播 [https://www.youtube.com/@junior-it-ai/streams]()
 
 * 加入我们的 Discord 社区（获取每日氛围学习免费知识点内容推送）: 
 
-中文 [https://juniorit.ai/zh/discord]()
-英文 [https://juniorit.ai/virtual-office]()
+- 中文 [https://juniorit.ai/zh/discord]()
+- 英文 [https://juniorit.ai/virtual-office]()
 
 ---
 
