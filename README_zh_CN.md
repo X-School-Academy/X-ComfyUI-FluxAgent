@@ -202,15 +202,15 @@ X-FluxAgent 简化了将您的概念转化为实际应用程序或自动化任�
 📖 阅读研究论文：
 **[Vibe Learning – 面向 AGI 时代的未来学习方法论](https://github.com/X-School-Academy/Vibe-Learning-Reseach)**
 
-🎬 **YouTube 直播系列**
-观看我们使用逐步 Vibe Coding 实时构建整个项目。
-🕘 **每周直播两次**：周二 & 周五，悉尼/澳大利亚时间 9PM
-▶️ 播放列表：[https://www.youtube.com/playlist?list=PL1rSmofNjIRH4rJq8tzA8a7gd6USySR4g](https://www.youtube.com/playlist?list=PL1rSmofNjIRH4rJq8tzA8a7gd6USySR4g)
-📌 **订阅频道** 以获取更新！
+* YouTube 中英文全程直播实战如何开发本项目: 
 
-💬 **加入我们的 Discord 社区**
-提问、分享想法、为项目做出贡献。
-🧠 Discord：[https://juniorit.ai/virtual-office](https://juniorit.ai/virtual-office)
+中文实战直播 [https://www.youtube.com/@ai-coding-frank/streams]()
+英文实战直播 [https://www.youtube.com/@junior-it-ai/streams]()
+
+* 加入我们的 Discord 社区（获取每日氛围学习免费知识点内容推送）: 
+
+中文 [https://juniorit.ai/zh/discord]()
+英文 [https://juniorit.ai/virtual-office]()
 
 ---
 
