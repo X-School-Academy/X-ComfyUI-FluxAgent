@@ -225,7 +225,7 @@ Ask questions, share ideas, contribute to the project.
 
 To install:
 1. Clone this repo
-2. Place it in your ComfyUI `extensions/` directory
+2. Place it in your ComfyUI `custom_nodes/` directory
 3. Restart ComfyUI
 4. Start building your next AI-powered workflow
 
