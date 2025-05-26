@@ -96,6 +96,10 @@ function createRichTextWidgetWidget(node, inputName, inputData) {
         onUpdate: (value) => {
             widget.value = value;
             saveValue();
+            // Also update the node's serialization data immediately
+            if (node && node.serialize_widgets) {
+                app.graph.setDirtyCanvas(true, false);
+            }
         }
     });
 

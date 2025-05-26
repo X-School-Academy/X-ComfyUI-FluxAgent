@@ -30,6 +30,17 @@ if (app) {
                     this.computeSize = function() {
                         return [300, 200]; // Minimum size [width, height]
                     };
+
+                    // Track size changes for serialization
+                    const onResized = this.onResized;
+                    this.onResized = function(size) {
+                        const result = onResized?.apply(this, arguments);
+                        // Mark workflow as dirty when node is resized
+                        if (app?.extensionManager?.workflow?.activeWorkflow?.changeTracker?.checkState) {
+                            app.extensionManager.workflow.activeWorkflow.changeTracker.checkState();
+                        }
+                        return result;
+                    };
                 };
                 
                 // In your node's JavaScript
@@ -51,10 +62,12 @@ if (app) {
                 const onSerialize = nodeType.prototype.onSerialize;
                 nodeType.prototype.onSerialize = function(o) {
                     onSerialize?.apply(this, arguments);
-                    const richTextWidget = this.widgets.find(w => w.name === "rich_text");
+                    const richTextWidget = this.widgets?.find(w => w.name === "rich_text" || w.type === "X-FluxAgent.RichTextWidget");
                     if (richTextWidget) {
                         o.rich_text_value = richTextWidget.value;
                     }
+                    // Also save node size
+                    o.size = this.size;
                 };
 
                 // Add deserialization for the rich_text widget value
@@ -62,23 +75,35 @@ if (app) {
                 nodeType.prototype.onConfigure = function(o) {
                     onConfigure?.apply(this, arguments);
                     if (o.rich_text_value !== undefined) {
-                        const richTextWidget = this.widgets.find(w => w.name === "rich_text");
-                        if (richTextWidget && richTextWidget.setValue) {
-                            richTextWidget.setValue(o.rich_text_value);
-                        } else if (richTextWidget) {
-                            // Fallback if setValue is not available at this stage, set directly
-                            richTextWidget.value = o.rich_text_value;
-                             // If editor exists, update it too
-                            if (richTextWidget.editor) {
-                                richTextWidget.editor.dispatch({
-                                    changes: {
-                                        from: 0,
-                                        to: richTextWidget.editor.state.doc.length,
-                                        insert: o.rich_text_value
-                                    }
-                                });
+                        const restoreRichText = () => {
+                            const richTextWidget = this.widgets?.find(w => w.name === "rich_text" || w.type === "X-FluxAgent.RichTextWidget");
+                            if (richTextWidget && richTextWidget.setValue) {
+                                richTextWidget.setValue(o.rich_text_value);
+                            } else if (richTextWidget) {
+                                // Fallback if setValue is not available at this stage, set directly
+                                richTextWidget.value = o.rich_text_value;
+                                 // If editor exists, update it too
+                                if (richTextWidget.editor) {
+                                    richTextWidget.editor.dispatch({
+                                        changes: {
+                                            from: 0,
+                                            to: richTextWidget.editor.state.doc.length,
+                                            insert: o.rich_text_value
+                                        }
+                                    });
+                                }
+                            } else {
+                                // Widget not found yet, try again after a short delay
+                                setTimeout(restoreRichText, 100);
                             }
-                        }
+                        };
+                        
+                        // Try immediately first
+                        restoreRichText();
+                    }
+                    // Restore node size
+                    if (o.size) {
+                        this.size = o.size;
                     }
                 };
             }

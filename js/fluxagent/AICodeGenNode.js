@@ -88,18 +88,60 @@ class AICodeGenNode {
         }
         targetNode.widgets = preservedWidgets;
 
+        // Store existing connections before modifying inputs/outputs
+        const existingInputConnections = {};
+        const existingOutputConnections = {};
+
+        // Store input connections
+        if (targetNode.inputs) {
+            targetNode.inputs.forEach((input, index) => {
+                if (input.link) {
+                    existingInputConnections[input.name] = {
+                        link: input.link,
+                        type: input.type
+                    };
+                }
+            });
+        }
+
+        // Store output connections
+        if (targetNode.outputs) {
+            targetNode.outputs.forEach((output, index) => {
+                if (output.links && output.links.length > 0) {
+                    existingOutputConnections[output.name] = {
+                        links: [...output.links],
+                        type: output.type
+                    };
+                }
+            });
+        }
+
         // Clear inputs/outputs
         targetNode.inputs = [];
         targetNode.outputs = [];
 
         // Add configured inputs
         config.input.forEach(field => {
-            targetNode.addInput(field.name, this.mapTypeToComfyUI(field.type));
+            const inputIndex = targetNode.addInput(field.name, this.mapTypeToComfyUI(field.type));
+            // Restore connection if it existed
+            if (existingInputConnections[field.name]) {
+                const input = targetNode.inputs[inputIndex];
+                if (input) {
+                    input.link = existingInputConnections[field.name].link;
+                }
+            }
         });
 
         // Add configured outputs
         config.output.forEach(field => {
-            targetNode.addOutput(field.name, this.mapTypeToComfyUI(field.type));
+            const outputIndex = targetNode.addOutput(field.name, this.mapTypeToComfyUI(field.type));
+            // Restore connections if they existed
+            if (existingOutputConnections[field.name]) {
+                const output = targetNode.outputs[outputIndex];
+                if (output) {
+                    output.links = existingOutputConnections[field.name].links;
+                }
+            }
         });
 
         // Update node size
@@ -644,6 +686,17 @@ app.registerExtension({
                 this.computeSize = function() {
                     return [300, 200]; // Minimum size [width, height]
                 };
+
+                // Track size changes for serialization
+                const onResized = this.onResized;
+                this.onResized = function(size) {
+                    const result = onResized?.apply(this, arguments);
+                    // Mark workflow as dirty when node is resized
+                    if (app?.extensionManager?.workflow?.activeWorkflow?.changeTracker?.checkState) {
+                        app.extensionManager.workflow.activeWorkflow.changeTracker.checkState();
+                    }
+                    return result;
+                };
             };
 
             // Handle serialization
@@ -655,6 +708,16 @@ app.registerExtension({
                     o.ai_codegen_config = this.aiCodeGenNode.config;
                 }
                 o.size = this.size; // Save node size
+                
+                // Save all widget values including rich text
+                if (this.widgets) {
+                    o.widgets_values = {};
+                    this.widgets.forEach(widget => {
+                        if (widget.name && widget.value !== undefined && widget.type !== "button") {
+                            o.widgets_values[widget.name] = widget.value;
+                        }
+                    });
+                }
                 // No explicit return needed as o is modified by reference in LiteGraph
             };
 
@@ -663,6 +726,13 @@ app.registerExtension({
             nodeType.prototype.onConfigure = function(o) {
                 // Call original onConfigure if it exists
                 onConfigure?.apply(this, arguments);
+                
+                // Clean up legacy data format - remove button widgets from widgets_values
+                if (o.widgets_values && typeof o.widgets_values === 'object') {
+                    if (o.widgets_values.manage_inputs_outputs) {
+                        delete o.widgets_values.manage_inputs_outputs;
+                    }
+                }
                 if (o.ai_codegen_config && this.aiCodeGenNode) {
                     this.aiCodeGenNode.config = JSON.parse(JSON.stringify(o.ai_codegen_config)); // Deep copy
                     // Defer update until node is fully set up, or ensure it's safe to call here
@@ -675,6 +745,34 @@ app.registerExtension({
                 }
                 if (o.size) { // Restore node size
                     this.size = o.size;
+                }
+                
+                // Restore all widget values including rich text
+                if (o.widgets_values && this.widgets && typeof o.widgets_values === 'object') {
+                    // Use setTimeout to defer widget restoration until after node is fully configured
+                    setTimeout(() => {
+                        if (this.widgets) {
+                            this.widgets.forEach(widget => {
+                                if (widget && widget.name && o.widgets_values[widget.name] !== undefined && widget.type !== "button") {
+                                    try {
+                                        if (widget.setValue && typeof widget.setValue === 'function') {
+                                            widget.setValue(o.widgets_values[widget.name]);
+                                        } else {
+                                            widget.value = o.widgets_values[widget.name];
+                                        }
+                                    } catch (error) {
+                                        console.warn(`Failed to restore widget value for ${widget.name}:`, error);
+                                        // Fallback to direct assignment
+                                        try {
+                                            widget.value = o.widgets_values[widget.name];
+                                        } catch (e) {
+                                            console.warn(`Failed to restore widget value fallback for ${widget.name}:`, e);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }, 100);
                 }
                  // It's important that onNodeCreated has already run and set up aiCodeGenNode
                 // If onConfigure is called before onNodeCreated, this.aiCodeGenNode might not exist yet.
