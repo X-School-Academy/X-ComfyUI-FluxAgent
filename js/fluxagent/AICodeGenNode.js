@@ -128,6 +128,18 @@ class AICodeGenNode {
                 const input = targetNode.inputs[inputIndex];
                 if (input) {
                     input.link = existingInputConnections[field.name].link;
+                    
+                    // Make sure this connection is properly reflected in the graph
+                    if (app.graph && input.link !== null) {
+                        const linkedNode = app.graph.getNodeById(app.graph.links[input.link].origin_id);
+                        if (linkedNode) {
+                            const outputIndex = app.graph.links[input.link].origin_slot;
+                            const output = linkedNode.outputs[outputIndex];
+                            if (output && output.links && !output.links.includes(input.link)) {
+                                output.links.push(input.link);
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -140,6 +152,23 @@ class AICodeGenNode {
                 const output = targetNode.outputs[outputIndex];
                 if (output) {
                     output.links = existingOutputConnections[field.name].links;
+                    
+                    // Make sure these connections are properly reflected in the graph
+                    if (app.graph && output.links && output.links.length > 0) {
+                        output.links.forEach(linkId => {
+                            if (app.graph.links[linkId]) {
+                                const targetNodeId = app.graph.links[linkId].target_id;
+                                const targetNode = app.graph.getNodeById(targetNodeId);
+                                if (targetNode) {
+                                    const inputIndex = app.graph.links[linkId].target_slot;
+                                    const input = targetNode.inputs[inputIndex];
+                                    if (input && input.link !== linkId) {
+                                        input.link = linkId;
+                                    }
+                                }
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -655,6 +684,19 @@ app.registerExtension({
                 // Initialize AI CodeGen node functionality, passing the ComfyUI node instance
                 this.aiCodeGenNode = new AICodeGenNode(this); // 'this' is the ComfyUI node
 
+                // Handle connection changes to ensure they're saved
+                const onConnectionsChange = this.onConnectionsChange;
+                this.onConnectionsChange = function(type, index, connected, link_info) {
+                    const result = onConnectionsChange?.apply(this, arguments);
+                    
+                    // Mark the workflow as modified whenever connections change
+                    if (app?.extensionManager?.workflow?.activeWorkflow?.changeTracker?.checkState) {
+                        app.extensionManager.workflow.activeWorkflow.changeTracker.checkState();
+                    }
+                    
+                    return result;
+                };
+
                 // Add manage button widget
                 const manageWidget = this.addWidget(
                     "button",
@@ -691,10 +733,18 @@ app.registerExtension({
                 const onResized = this.onResized;
                 this.onResized = function(size) {
                     const result = onResized?.apply(this, arguments);
+                    
+                    // Save the new size for later serialization
+                    this.size = size || this.size;
+                    
                     // Mark workflow as dirty when node is resized
                     if (app?.extensionManager?.workflow?.activeWorkflow?.changeTracker?.checkState) {
                         app.extensionManager.workflow.activeWorkflow.changeTracker.checkState();
                     }
+                    
+                    // Ensure the canvas is redrawn
+                    app.graph.setDirtyCanvas(true, false);
+                    
                     return result;
                 };
             };
@@ -708,6 +758,31 @@ app.registerExtension({
                     o.ai_codegen_config = this.aiCodeGenNode.config;
                 }
                 o.size = this.size; // Save node size
+                
+                // Save connections for inputs and outputs
+                o.input_connections = {};
+                if (this.inputs) {
+                    this.inputs.forEach((input, index) => {
+                        if (input.link !== null) {
+                            o.input_connections[input.name] = {
+                                link: input.link,
+                                type: input.type
+                            };
+                        }
+                    });
+                }
+                
+                o.output_connections = {};
+                if (this.outputs) {
+                    this.outputs.forEach((output, index) => {
+                        if (output.links && output.links.length > 0) {
+                            o.output_connections[output.name] = {
+                                links: [...output.links],
+                                type: output.type
+                            };
+                        }
+                    })
+                }
                 
                 // Save all widget values including rich text
                 if (this.widgets) {
@@ -740,11 +815,51 @@ app.registerExtension({
                     // For now, let's assume onNodeCreated will handle initial update if needed.
                     // If values are present, it's good to update.
                      if (this.aiCodeGenNode.config.input.length > 0 || this.aiCodeGenNode.config.output.length > 0) {
+                        // Store serialized connection information to be used after updateNodeStructure
+                        const savedInputConnections = o.input_connections || {};
+                        const savedOutputConnections = o.output_connections || {};
+                        
                         this.aiCodeGenNode.updateNodeStructure(this);
+                        
+                        // Restore saved connections after structure update
+                        setTimeout(() => {
+                            // Restore input connections
+                            if (this.inputs) {
+                                this.inputs.forEach((input, index) => {
+                                    if (savedInputConnections[input.name]) {
+                                        input.link = savedInputConnections[input.name].link;
+                                    }
+                                });
+                            }
+                            
+                            // Restore output connections
+                            if (this.outputs) {
+                                this.outputs.forEach((output, index) => {
+                                    if (savedOutputConnections[output.name]) {
+                                        output.links = [...savedOutputConnections[output.name].links];
+                                    }
+                                });
+                            }
+                            
+                            // Update graph to reflect restored connections
+                            if (app.graph) {
+                                app.graph.setDirtyCanvas(true, true);
+                            }
+                        }, 100);
                     }
                 }
                 if (o.size) { // Restore node size
                     this.size = o.size;
+                    // Force recomputation of node's size
+                    setTimeout(() => {
+                        if (this.setSize) {
+                            this.setSize(this.size);
+                            // Ensure the graph is redrawn
+                            if (app.graph) {
+                                app.graph.setDirtyCanvas(true, true);
+                            }
+                        }
+                    }, 50);
                 }
                 
                 // Restore all widget values including rich text
