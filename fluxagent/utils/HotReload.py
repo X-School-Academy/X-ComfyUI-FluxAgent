@@ -13,7 +13,7 @@ import importlib.util
 from collections import defaultdict
 
 import folder_paths
-from fluxagent import load_custom_node
+#from fluxagent import load_custom_node
 from comfy_execution import caching
 
 # ==============================================================================
@@ -92,7 +92,7 @@ def reload_module(module_name: str) -> bool:
 
         # Load the custom node
         module_path: str = os.path.join(CUSTOM_NODE_ROOT[0], module_name)
-        load_custom_node(module_path)
+        #load_custom_node(module_path)
         
         logging.info(f'[ComfyUI-HotReload] Successfully reloaded module: {module_name}')
         return True
