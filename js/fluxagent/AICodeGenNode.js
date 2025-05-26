@@ -88,16 +88,18 @@ class AICodeGenNode {
         }
         targetNode.widgets = preservedWidgets;
 
-        // Store existing connections before modifying inputs/outputs
+        // Store existing connections with detailed information
         const existingInputConnections = {};
         const existingOutputConnections = {};
 
         // Store input connections
         if (targetNode.inputs) {
             targetNode.inputs.forEach((input, index) => {
-                if (input.link) {
+                if (input.link !== null && input.link !== undefined && app.graph && app.graph.links[input.link]) {
+                    const linkInfo = app.graph.links[input.link];
                     existingInputConnections[input.name] = {
-                        link: input.link,
+                        originNodeId: linkInfo.origin_id,
+                        originSlot: linkInfo.origin_slot,
                         type: input.type
                     };
                 }
@@ -108,78 +110,117 @@ class AICodeGenNode {
         if (targetNode.outputs) {
             targetNode.outputs.forEach((output, index) => {
                 if (output.links && output.links.length > 0) {
-                    existingOutputConnections[output.name] = {
-                        links: [...output.links],
-                        type: output.type
-                    };
+                    const validConnections = [];
+                    output.links.forEach(linkId => {
+                        if (app.graph && app.graph.links[linkId]) {
+                            const linkInfo = app.graph.links[linkId];
+                            validConnections.push({
+                                targetNodeId: linkInfo.target_id,
+                                targetSlot: linkInfo.target_slot
+                            });
+                        }
+                    });
+                    if (validConnections.length > 0) {
+                        existingOutputConnections[output.name] = {
+                            connections: validConnections,
+                            type: output.type
+                        };
+                    }
                 }
             });
         }
 
-        // Clear inputs/outputs
+        // Clear inputs/outputs arrays
         targetNode.inputs = [];
         targetNode.outputs = [];
 
         // Add configured inputs
         config.input.forEach(field => {
-            const inputIndex = targetNode.addInput(field.name, this.mapTypeToComfyUI(field.type));
-            // Restore connection if it existed
-            if (existingInputConnections[field.name]) {
-                const input = targetNode.inputs[inputIndex];
-                if (input) {
-                    input.link = existingInputConnections[field.name].link;
-                    
-                    // Make sure this connection is properly reflected in the graph
-                    if (app.graph && input.link !== null) {
-                        const linkedNode = app.graph.getNodeById(app.graph.links[input.link].origin_id);
-                        if (linkedNode) {
-                            const outputIndex = app.graph.links[input.link].origin_slot;
-                            const output = linkedNode.outputs[outputIndex];
-                            if (output && output.links && !output.links.includes(input.link)) {
-                                output.links.push(input.link);
-                            }
-                        }
-                    }
-                }
-            }
+            targetNode.addInput(field.name, this.mapTypeToComfyUI(field.type));
         });
 
         // Add configured outputs
         config.output.forEach(field => {
-            const outputIndex = targetNode.addOutput(field.name, this.mapTypeToComfyUI(field.type));
-            // Restore connections if they existed
-            if (existingOutputConnections[field.name]) {
-                const output = targetNode.outputs[outputIndex];
-                if (output) {
-                    output.links = existingOutputConnections[field.name].links;
-                    
-                    // Make sure these connections are properly reflected in the graph
-                    if (app.graph && output.links && output.links.length > 0) {
-                        output.links.forEach(linkId => {
-                            if (app.graph.links[linkId]) {
-                                const targetNodeId = app.graph.links[linkId].target_id;
-                                const targetNode = app.graph.getNodeById(targetNodeId);
-                                if (targetNode) {
-                                    const inputIndex = app.graph.links[linkId].target_slot;
-                                    const input = targetNode.inputs[inputIndex];
-                                    if (input && input.link !== linkId) {
-                                        input.link = linkId;
-                                    }
+            targetNode.addOutput(field.name, this.mapTypeToComfyUI(field.type));
+        });
+
+        // Restore input connections
+        if (targetNode.inputs) {
+            targetNode.inputs.forEach((input, inputIndex) => {
+                const connectionData = existingInputConnections[input.name];
+                if (connectionData && app.graph) {
+                    // Find the origin node and output
+                    const originNode = app.graph.getNodeById(connectionData.originNodeId);
+                    if (originNode && originNode.outputs && originNode.outputs[connectionData.originSlot]) {
+                        // Use a timeout to ensure the graph is in a consistent state
+                        setTimeout(() => {
+                            try {
+                                if (originNode.connect) {
+                                    originNode.connect(connectionData.originSlot, targetNode, inputIndex);
                                 }
+                            } catch (error) {
+                                console.warn('Failed to restore input connection:', error);
                             }
-                        });
+                        }, 10);
                     }
                 }
-            }
-        });
+            });
+        }
+
+        // Restore output connections
+        if (targetNode.outputs) {
+            targetNode.outputs.forEach((output, outputIndex) => {
+                const connectionData = existingOutputConnections[output.name];
+                if (connectionData && app.graph) {
+                    connectionData.connections.forEach(connData => {
+                        // Find the target node and input
+                        const targetNodeForOutput = app.graph.getNodeById(connData.targetNodeId);
+                        if (targetNodeForOutput && targetNodeForOutput.inputs && targetNodeForOutput.inputs[connData.targetSlot]) {
+                            // Use a timeout to ensure the graph is in a consistent state
+                            setTimeout(() => {
+                                try {
+                                    if (targetNode.connect) {
+                                        targetNode.connect(outputIndex, targetNodeForOutput, connData.targetSlot);
+                                    }
+                                } catch (error) {
+                                    console.warn('Failed to restore output connection:', error);
+                                }
+                            }, 10);
+                        }
+                    });
+                }
+            });
+        }
 
         // Update node size
         targetNode.setSize(targetNode.computeSize());
 
-        // Mark as modified
-        if (app.graph && app.graph.setDirtyCanvas) {
-            app.graph.setDirtyCanvas(true, true);
-        }
+        // Clean up any invalid links in the graph
+        setTimeout(() => {
+            if (app.graph && app.graph.links) {
+                // Remove any invalid links that might be left over
+                for (let linkId in app.graph.links) {
+                    const link = app.graph.links[linkId];
+                    if (link) {
+                        const originNode = app.graph.getNodeById(link.origin_id);
+                        const targetNode = app.graph.getNodeById(link.target_id);
+                        
+                        // Check if both nodes exist and have the required slots
+                        if (!originNode || !targetNode || 
+                            !originNode.outputs || !originNode.outputs[link.origin_slot] ||
+                            !targetNode.inputs || !targetNode.inputs[link.target_slot]) {
+                            console.log(`Cleaning up invalid link ${linkId}`);
+                            delete app.graph.links[linkId];
+                        }
+                    }
+                }
+            }
+            
+            // Mark as modified
+            if (app.graph && app.graph.setDirtyCanvas) {
+                app.graph.setDirtyCanvas(true, true);
+            }
+        }, 50);
     }
 
     // Map configuration types to ComfyUI types
