@@ -13,7 +13,7 @@ import importlib.util
 from collections import defaultdict
 
 import folder_paths
-from nodes import load_custom_node
+from fluxagent import load_custom_node
 from comfy_execution import caching
 
 # ==============================================================================
