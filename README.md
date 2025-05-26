@@ -225,9 +225,11 @@ Ask questions, share ideas, contribute to the project.
 
 To install:
 1. Clone this repo
-2. Place it in your ComfyUI `extensions/` directory
+2. Place it in your ComfyUI `custom_nodes/` directory
 3. Restart ComfyUI
 4. Start building your next AI-powered workflow
+
+📁 **For developers**: See our [Project Structure Guide](PROJECT_STRUCTURE.md) to understand the codebase organization.
 
 ---
 
@@ -241,6 +243,19 @@ See the [LICENSE](./LICENSE) file for full details.
 ## 🤝 Contribute and Join the Movement
 
 We welcome contributors of all backgrounds — no coding experience required.
+
+### 📁 For Developers & Contributors
+
+**New to the project?** Start here:
+- 📖 **[Project Structure Guide](PROJECT_STRUCTURE.md)** - Complete overview of the codebase organization
+- 🌏 **[项目结构指南 (中文)](PROJECT_STRUCTURE_zh_CN.md)** - Chinese version of the structure guide
+- 🛠️ **[Contribution Terms](CONTRIBUTION_TERM.md)** - Copyright and contribution guidelines
+
+The structure guide covers:
+- 🧩 **Core directories** (`/fluxagent/`, `/js/`, `/user/`)
+- 🔧 **Development workflow** and best practices
+- 📝 **File naming conventions** and coding standards
+- 🚀 **Getting started** steps for new contributors
 
 > By contributing, you agree to assign copyright
 > of your work to the project owner  

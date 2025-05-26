@@ -218,9 +218,11 @@ X-FluxAgent 简化了将您的概念转化为实际应用程序或自动化任�
 安装方法：
 
 1. 克隆此仓库
-2. 将其放入您的 ComfyUI `extensions/` 目录
+2. 将其放入您的 ComfyUI `custom_nodes/` 目录
 3. 重启 ComfyUI
 4. 开始构建您的下一个 AI 驱动工作流
+
+📁 **开发者**: 参见我们的 [项目结构指南](PROJECT_STRUCTURE_zh_CN.md) 了解代码库组织。
 
 ---
 
@@ -234,6 +236,19 @@ X-FluxAgent 简化了将您的概念转化为实际应用程序或自动化任�
 ## 🤝 贡献与参与
 
 我们欢迎各类背景的贡献者——无需编码经验。
+
+### 📁 开发者与贡献者
+
+**初次接触项目？** 从这里开始：
+- 📖 **[项目结构指南 (中文)](PROJECT_STRUCTURE_zh_CN.md)** - 代码库组织的完整概述
+- 🌏 **[Project Structure Guide (English)](PROJECT_STRUCTURE.md)** - 英文版结构指南
+- 🛠️ **[贡献条款](CONTRIBUTION_TERM.md)** - 版权和贡献指南
+
+结构指南涵盖：
+- 🧩 **核心目录** (`/fluxagent/`, `/js/`, `/user/`)
+- 🔧 **开发工作流** 和最佳实践
+- 📝 **文件命名约定** 和编码标准
+- 🚀 **新贡献者** 入门步骤
 
 > 通过贡献，您同意将您的作品版权转让给项目所有者，以便用于任何用途，包括商业用途。
 > 参见 [CONTRIBUTION\_TERM.md](./CONTRIBUTION_TERM.md)
