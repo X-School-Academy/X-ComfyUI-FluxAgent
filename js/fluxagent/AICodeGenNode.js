@@ -654,6 +654,7 @@ app.registerExtension({
                 if (this.aiCodeGenNode) {
                     o.ai_codegen_config = this.aiCodeGenNode.config;
                 }
+                o.size = this.size; // Save node size
                 // No explicit return needed as o is modified by reference in LiteGraph
             };
 
@@ -671,6 +672,9 @@ app.registerExtension({
                      if (this.aiCodeGenNode.config.input.length > 0 || this.aiCodeGenNode.config.output.length > 0) {
                         this.aiCodeGenNode.updateNodeStructure(this);
                     }
+                }
+                if (o.size) { // Restore node size
+                    this.size = o.size;
                 }
                  // It's important that onNodeCreated has already run and set up aiCodeGenNode
                 // If onConfigure is called before onNodeCreated, this.aiCodeGenNode might not exist yet.

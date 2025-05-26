@@ -39,7 +39,7 @@ function createRichTextWidgetWidget(node, inputName, inputData) {
     }
 
     const widget = {
-        type: "X-FluxAgent.RichTextNode",
+        type: "X-FluxAgent.RichTextWidget",
         name: inputName,
         options: { hideOnZoom: true },
         value: inputData[1]?.default || "",
