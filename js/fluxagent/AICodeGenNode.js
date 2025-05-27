@@ -21,31 +21,33 @@ const NODE_NAME = "X-FluxAgent.AICodeGenNode";
 /* ------------------------------------------------------------------ */
 
 function mapTypeToComfy(type) {
-    switch (type) {
-        case "string":   return "STRING";
-        case "number":   return "INT";
-        case "image":    return "IMAGE";
-        case "vector":   return "VECTOR";
-        case "boolean":  return "BOOLEAN";
-        case "json":     return "JSON";
-        case "any":      return "ANY";
-        default:         return "STRING";
-    }
+    const typeMap = {
+        'string': 'STRING',
+        'int': 'INT',
+        'float': 'FLOAT',
+        'boolean': 'BOOLEAN',
+        'combo': 'COMBO',
+        'image': 'IMAGE',
+        'audio': 'AUDIO',
+        'json': 'JSON',
+        'any': 'ANY'
+    };
+    return typeMap[type] || 'ANY';
 }
 
 function comfyTypeToSelect(type) {
-    const t = (type || "").toUpperCase();
-    switch (t) {
-        case "STRING":  return "string";
-        case "INT":
-        case "NUMBER":  return "number";
-        case "IMAGE":   return "image";
-        case "VECTOR":  return "vector";
-        case "BOOLEAN": return "boolean";
-        case "JSON":    return "json";
-        case "ANY":     return "any";
-        default:        return "string";
-    }
+    const typeMap = {
+        'STRING': 'string',
+        'INT': 'int',
+        'FLOAT': 'float',
+        'BOOLEAN': 'boolean',
+        'COMBO': 'combo',
+        'IMAGE': 'image',
+        'AUDIO': 'audio',
+        'JSON': 'json',
+        'ANY': 'any'
+    };
+    return typeMap[(type || '').toUpperCase()] || 'any';
 }
 
 /* ------------------------------------------------------------------ */
