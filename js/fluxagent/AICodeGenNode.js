@@ -159,9 +159,11 @@ class AICodeGenNode {
         
         // Populate inputs only in input container
         this.node.inputs?.forEach((inp) => {
-            inputContainer.appendChild(
-                this._createFieldElement({name:inp.name, type:comfyTypeToSelect(inp.type)}, "input")
-            );
+            if (inp.type != "X-FluxAgent.RichTextWidget") {
+                inputContainer.appendChild(
+                    this._createFieldElement({name:inp.name, type:comfyTypeToSelect(inp.type)}, "input")
+                );
+            }
         });
         
         // Populate outputs only in output container
@@ -332,12 +334,21 @@ app.registerExtension({
 
             // attach helper class
             this.aiCodeGen = new AICodeGenNode(this);
-
-            // add management widget
-            const widget = this.addWidget("button", "Manage Inputs/Outputs", null, () => {
-                this.aiCodeGen.openManager();
-            });
-            widget.node = this; // keep reference for ComfyUI
+            // add management widget at the top
+            const widget = {
+                name: "Manage Inputs/Outputs",
+                type: "button",
+                callback: () => {
+                    this.aiCodeGen.openManager();
+                },
+                options: {},
+                value: null
+            };
+            
+            // Insert widget at the beginning of widgets array
+            if (!this.widgets) this.widgets = [];
+            this.widgets.unshift(widget);
+            widget.parent = this; // keep reference for ComfyUI
 
             // mark graph dirty when connections change
             const origConn = this.onConnectionsChange;
