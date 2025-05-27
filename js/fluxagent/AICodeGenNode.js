@@ -347,6 +347,20 @@ app.registerExtension({
                     app.extensionManager.workflow.activeWorkflow.changeTracker.checkState();
                 }
             };
+
+            // Set initial width and height [width, height]
+            this.size = [300, 200]; 
+
+            // Track size changes for serialization
+            const onResized = this.onResized;
+            this.onResized = function(size) {
+                const result = onResized?.apply(this, arguments);
+                // Mark workflow as dirty when node is resized
+                if (app?.extensionManager?.workflow?.activeWorkflow?.changeTracker?.checkState) {
+                    app.extensionManager.workflow.activeWorkflow.changeTracker.checkState();
+                }
+                return result;
+            };
         };
     }
 });
