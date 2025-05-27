@@ -62,7 +62,7 @@ if (app) {
                         o.rich_text_value = richTextWidget.value;
                     }
                     // Also save node size
-                    o.size = this.size;
+                    //o.size = this.size;
                 };
 
                 // Add deserialization for the rich_text widget value
