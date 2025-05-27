@@ -134,6 +134,93 @@ function createRichTextWidgetWidget(node, inputName, inputData) {
     document.body.appendChild(widget.htmlElement);
     node.addCustomWidget(widget);
 
+    // Add automatic serialization/deserialization for the widget
+    const originalOnSerialize = node.onSerialize;
+    node.onSerialize = function(o) {
+        if (originalOnSerialize) {
+            originalOnSerialize.apply(this, arguments);
+        }
+        // Find and serialize all RichTextWidget values
+        const richTextWidgets = this.widgets?.filter(w => w.type === "X-FluxAgent.RichTextWidget") || [];
+        if (richTextWidgets.length > 0) {
+            o.rich_text_widgets = {};
+            richTextWidgets.forEach(w => {
+                o.rich_text_widgets[w.name] = w.value;
+            });
+        }
+    };
+
+    const originalOnConfigure = node.onConfigure;
+    node.onConfigure = function(o) {
+        if (originalOnConfigure) {
+            originalOnConfigure.apply(this, arguments);
+        }
+        // Restore RichTextWidget values
+        if (o.rich_text_widgets) {
+            const restoreRichTextWidgets = () => {
+                let allRestored = true;
+                for (const [widgetName, widgetValue] of Object.entries(o.rich_text_widgets)) {
+                    const richTextWidget = this.widgets?.find(w => 
+                        w.type === "X-FluxAgent.RichTextWidget" && w.name === widgetName
+                    );
+                    if (richTextWidget) {
+                        if (richTextWidget.setValue) {
+                            richTextWidget.setValue(widgetValue);
+                        } else {
+                            // Fallback if setValue is not available at this stage
+                            richTextWidget.value = widgetValue;
+                            if (richTextWidget.editor) {
+                                richTextWidget.editor.dispatch({
+                                    changes: {
+                                        from: 0,
+                                        to: richTextWidget.editor.state.doc.length,
+                                        insert: widgetValue
+                                    }
+                                });
+                            }
+                        }
+                    } else {
+                        allRestored = false;
+                    }
+                }
+                
+                // If not all widgets were found, try again after a short delay
+                if (!allRestored) {
+                    setTimeout(restoreRichTextWidgets, 100);
+                }
+            };
+            
+            // Try immediately first
+            restoreRichTextWidgets();
+        }
+        
+        // Backward compatibility: handle old single widget serialization format
+        if (o.rich_text_value !== undefined) {
+            const restoreOldFormat = () => {
+                const richTextWidget = this.widgets?.find(w => w.type === "X-FluxAgent.RichTextWidget");
+                if (richTextWidget) {
+                    if (richTextWidget.setValue) {
+                        richTextWidget.setValue(o.rich_text_value);
+                    } else {
+                        richTextWidget.value = o.rich_text_value;
+                        if (richTextWidget.editor) {
+                            richTextWidget.editor.dispatch({
+                                changes: {
+                                    from: 0,
+                                    to: richTextWidget.editor.state.doc.length,
+                                    insert: o.rich_text_value
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    setTimeout(restoreOldFormat, 100);
+                }
+            };
+            restoreOldFormat();
+        }
+    };
+
     return { widget };
 }
 

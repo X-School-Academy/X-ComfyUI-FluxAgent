@@ -52,55 +52,6 @@ if (app) {
                         node.setDirtyCanvas(true, true);
                     }
                 };
-   
-                // Add serialization for the rich_text widget value
-                const onSerialize = nodeType.prototype.onSerialize;
-                nodeType.prototype.onSerialize = function(o) {
-                    onSerialize?.apply(this, arguments);
-                    const richTextWidget = this.widgets?.find(w =>  w.type === "X-FluxAgent.RichTextWidget");
-                    if (richTextWidget) {
-                        o.rich_text_value = richTextWidget.value;
-                    }
-                    // Also save node size
-                    //o.size = this.size;
-                };
-
-                // Add deserialization for the rich_text widget value
-                const onConfigure = nodeType.prototype.onConfigure;
-                nodeType.prototype.onConfigure = function(o) {
-                    onConfigure?.apply(this, arguments);
-                    if (o.rich_text_value !== undefined) {
-                        const restoreRichText = () => {
-                            const richTextWidget = this.widgets?.find(w => w.type === "X-FluxAgent.RichTextWidget");
-                            if (richTextWidget && richTextWidget.setValue) {
-                                richTextWidget.setValue(o.rich_text_value);
-                            } else if (richTextWidget) {
-                                // Fallback if setValue is not available at this stage, set directly
-                                richTextWidget.value = o.rich_text_value;
-                                 // If editor exists, update it too
-                                if (richTextWidget.editor) {
-                                    richTextWidget.editor.dispatch({
-                                        changes: {
-                                            from: 0,
-                                            to: richTextWidget.editor.state.doc.length,
-                                            insert: o.rich_text_value
-                                        }
-                                    });
-                                }
-                            } else {
-                                // Widget not found yet, try again after a short delay
-                                setTimeout(restoreRichText, 100);
-                            }
-                        };
-                        
-                        // Try immediately first
-                        restoreRichText();
-                    }
-                    // Restore node size
-                    if (o.size) {
-                        this.size = o.size;
-                    }
-                };
             }
         },
     });
