@@ -25,11 +25,6 @@ if (app) {
                     
                     // Set initial width and height [width, height]
                     this.size = [300, 200]; 
-                    
-                    // Optional: set minimum size
-                    this.computeSize = function() {
-                        return [300, 200]; // Minimum size [width, height]
-                    };
 
                     // Track size changes for serialization
                     const onResized = this.onResized;
@@ -62,7 +57,7 @@ if (app) {
                 const onSerialize = nodeType.prototype.onSerialize;
                 nodeType.prototype.onSerialize = function(o) {
                     onSerialize?.apply(this, arguments);
-                    const richTextWidget = this.widgets?.find(w => w.name === "rich_text" || w.type === "X-FluxAgent.RichTextWidget");
+                    const richTextWidget = this.widgets?.find(w =>  w.type === "X-FluxAgent.RichTextWidget");
                     if (richTextWidget) {
                         o.rich_text_value = richTextWidget.value;
                     }
@@ -76,7 +71,7 @@ if (app) {
                     onConfigure?.apply(this, arguments);
                     if (o.rich_text_value !== undefined) {
                         const restoreRichText = () => {
-                            const richTextWidget = this.widgets?.find(w => w.name === "rich_text" || w.type === "X-FluxAgent.RichTextWidget");
+                            const richTextWidget = this.widgets?.find(w => w.type === "X-FluxAgent.RichTextWidget");
                             if (richTextWidget && richTextWidget.setValue) {
                                 richTextWidget.setValue(o.rich_text_value);
                             } else if (richTextWidget) {
