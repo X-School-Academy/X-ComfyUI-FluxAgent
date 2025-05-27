@@ -88,12 +88,12 @@ class AICodeGenNode {
                 <div class="modal-content">
                     <div id="input-fields" class="field-list active">
                         <div id="input-container"></div>
-                        <button class="add-field-button" data-type="input">+ Add Input</button>
+                        <button class="add-field-button" data-type="input">+ Add Input Field</button>
                     </div>
 
                     <div id="output-fields" class="field-list">
                         <div id="output-container"></div>
-                        <button class="add-field-button" data-type="output">+ Add Output</button>
+                        <button class="add-field-button" data-type="output">+ Add Output Field</button>
                     </div>
                 </div>
 
@@ -124,6 +124,8 @@ class AICodeGenNode {
                 .tab-button.active{background:#555;color:#fff;
                     border-bottom-color:#007acc}
                 .modal-content{padding:20px;overflow:auto;flex:1}
+                .field-list{display:none}
+                .field-list.active{display:block}
                 .field-item{display:flex;align-items:center;margin-bottom:8px}
                 .field-item input{flex:1;margin-right:8px;padding:4px 6px;
                     border-radius:4px;border:none;background:#555;color:#fff}
@@ -150,11 +152,19 @@ class AICodeGenNode {
         /* -------- populate current slots -------- */
         const inputContainer  = modal.querySelector("#input-container");
         const outputContainer = modal.querySelector("#output-container");
+        
+        // Clear containers first
+        inputContainer.innerHTML = '';
+        outputContainer.innerHTML = '';
+        
+        // Populate inputs only in input container
         this.node.inputs?.forEach((inp) => {
             inputContainer.appendChild(
                 this._createFieldElement({name:inp.name, type:comfyTypeToSelect(inp.type)}, "input")
             );
         });
+        
+        // Populate outputs only in output container
         this.node.outputs?.forEach((out) => {
             outputContainer.appendChild(
                 this._createFieldElement({name:out.name, type:comfyTypeToSelect(out.type)}, "output")
@@ -175,9 +185,16 @@ class AICodeGenNode {
         modal.querySelectorAll(".add-field-button").forEach(btn=>{
             btn.addEventListener("click",()=>{
                 const dest = modal.querySelector(`#${btn.dataset.type}-container`);
-                dest.appendChild(
-                    this._createFieldElement({name:"new_field", type:"string"}, btn.dataset.type)
-                );
+                const timestamp = Date.now();
+                const newFieldElement = this._createFieldElement({name:`${btn.dataset.type}_${timestamp}`, type:"string"}, btn.dataset.type);
+                dest.appendChild(newFieldElement);
+                
+                // Focus and select the input field for easy editing
+                const input = newFieldElement.querySelector("input");
+                if (input) {
+                    input.focus();
+                    input.select();
+                }
             });
         });
 
