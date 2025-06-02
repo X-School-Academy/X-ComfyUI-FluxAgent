@@ -21,13 +21,23 @@ class AICodeGenNode:
     CATEGORY = "X-FluxAgent"
     OUTPUT_NODE = True
 
+
+    '''
+    workflow's links are in the format:
+    [
+        [link_id, from_node_id, from_output_index, to_node_id, to_input_index, data_type]
+    ]
+    '''
+
+
     def process(self, **kw):
         # the dynamically created input data will be in the dictionary kwargs
         node_id = kw.get('node_id', 0)
         print(f'Processing AICodeGenNode with node_id: {node_id}')
 
-        #for k, v in kw.items():
-        #    print(f'{k} => {v}')
+        # print kw as formatted json string
+        #import json
+        #print(json.dumps(kw, indent=4))
         
         inputs = []
         outputs = []
@@ -54,13 +64,25 @@ class AICodeGenNode:
                                 "type": output.get('type', 'ANY')
                             })
                         break
+
+        '''
+        inputs => [{'name': 'input_1748856857813', 'type': 'STRING'}, {'name': 'input_1748856863647', 'type': 'STRING'}]
+        outputs => [{'name': 'STRING1', 'type': 'STRING'}]
+
+        input_1748856857813 = kw.get('input_1748856857813')
+        input_1748856863647 = kw.get('input_1748856863647')
+
+        STRING1 = f"Generated code goes here {node_id}"
+
+        return {"ui": None, "result": (STRING1,)}
+        '''
         
         print(f"inputs => {inputs}")
         print(f"outputs => {outputs}")
         
         # This is a placeholder for the actual code generation logic
         # You can implement your own code generation logic here
-        generated_code = "Generated code goes here"
+        generated_code = f"Generated code goes here {node_id}"
         
         # Return the generated code as a string
         return (generated_code,)
