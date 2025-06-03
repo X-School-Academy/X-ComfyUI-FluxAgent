@@ -20,34 +20,25 @@ const NODE_NAME = "X-FluxAgent.AICodeGenNode";
 /* Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
+const dataTypes = [
+    "string", "int", "float" ,"boolean", "combo", "image", "audio", "json", "any"
+];
+
+
 function mapTypeToComfy(type) {
-    const typeMap = {
-        'string': 'STRING',
-        'int': 'INT',
-        'float': 'FLOAT',
-        'boolean': 'BOOLEAN',
-        'combo': 'COMBO',
-        'image': 'IMAGE',
-        'audio': 'AUDIO',
-        'json': 'JSON',
-        'any': 'ANY'
-    };
-    return typeMap[type] || 'ANY';
+    if (dataTypes.includes(type.toLowerCase())) {
+        return type.toUpperCase();
+    } else {
+        return "ANY"; // Default to 'ANY' if type is not recognized
+    }
 }
 
 function comfyTypeToSelect(type) {
-    const typeMap = {
-        'STRING': 'string',
-        'INT': 'int',
-        'FLOAT': 'float',
-        'BOOLEAN': 'boolean',
-        'COMBO': 'combo',
-        'IMAGE': 'image',
-        'AUDIO': 'audio',
-        'JSON': 'json',
-        'ANY': 'any'
-    };
-    return typeMap[(type || '').toUpperCase()] || 'any';
+   if (dataTypes.includes(type.toLowerCase())) {
+        return type.toLowerCase();
+    } else {
+        return "any"; // Default to 'any' if type is not recognized
+    }
 }
 
 /* ------------------------------------------------------------------ */
@@ -220,16 +211,16 @@ class AICodeGenNode {
     _createFieldElement(field, ioType) {
         const div = document.createElement("div");
         div.className = "field-item";
+        
+        // Generate options for all data types
+        const typeOptions = dataTypes.map(type => 
+            `<option value="${type}">${type}</option>`
+        ).join('');
+        
         div.innerHTML = `
             <input type="text" value="${field.name}" placeholder="name">
             <select>
-                <option value="string">string</option>
-                <option value="number">number</option>
-                <option value="boolean">boolean</option>
-                <option value="image">image</option>
-                <option value="vector">vector</option>
-                <option value="any">any</option>
-                <option value="json">json</option>
+                ${typeOptions}
             </select>
             <div class="field-actions">
                 <button>&times;</button>
