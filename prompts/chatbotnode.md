@@ -1,3 +1,8 @@
+You should only work on the codebase in the path `custom_nodes/X-FLuxAgent` and check & index the code under this path
+You may need to run any test or install packages with `source venv_xcomfyui/bin/activate`
+Please don't try to start the comfyUI for test, as I will test manually. 
+You can write test code to test any js and python code, but please donot test with a running comfyui instance, as I will test it manually.
+
 Please create a ComfyUI chatbot custom tab with the following requirements:
 
 1. Update the files for the implement: `fluxagent/ChatBotService.py` and `js/fluxagent/ChatBotTab.js`.
