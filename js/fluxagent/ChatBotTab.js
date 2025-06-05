@@ -1,31 +1,56 @@
 import { app } from "/scripts/app.js";
 import { api } from "/scripts/api.js";
+import markdownIt from 'https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/+esm'
+import highlightJs from 'https://cdn.jsdelivr.net/npm/highlight.js@11.11.1/+esm'
 
-// Simple markdown-to-HTML converter
+// Configure markdown-it with highlight.js integration
+const md = new markdownIt({
+    html: true,        // Enable HTML tags in source
+    xhtmlOut: false,   // Use '>' for single tags (<br>)
+    breaks: true,      // Convert '\n' in paragraphs into <br>
+    linkify: true,     // Autoconvert URL-like text to links
+    typographer: true, // Enable some language-neutral replacement + quotes beautification
+    highlight: function (str, lang) {
+        let highlightedCode = '';
+        let detectedLang = lang;
+        
+        if (lang && highlightJs.getLanguage(lang)) {
+            try {
+                const result = highlightJs.highlight(str, { language: lang, ignoreIllegals: true });
+                highlightedCode = result.value;
+                detectedLang = lang;
+            } catch (err) {
+                console.warn('Syntax highlighting failed:', err);
+            }
+        }
+        
+        // Auto-detect language if not specified or if specified language failed
+        if (!highlightedCode) {
+            try {
+                const result = highlightJs.highlightAuto(str);
+                highlightedCode = result.value;
+                detectedLang = result.language || 'text';
+            } catch (err) {
+                console.warn('Auto syntax highlighting failed:', err);
+                highlightedCode = md.utils.escapeHtml(str);
+                detectedLang = 'text';
+            }
+        }
+        
+        // Add language label
+        const langLabel = detectedLang && detectedLang !== 'text' ? 
+            `<div class="code-lang-label">${detectedLang}</div>` : '';
+        
+        return `<div class="code-block-container">
+                  ${langLabel}
+                  <pre class="hljs" data-lang="${detectedLang}"><code>${highlightedCode}</code></pre>
+                </div>`;
+    }
+});
+
 function markdownToHtml(markdown) {
     if (!markdown) return '';
-    
-    let html = markdown
-        // Headers
-        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-        .replace(/^## (.*$)/gim, '<h2>$1</h2>')  
-        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-        // Bold
-        .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
-        .replace(/__(.*?)__/gim, '<strong>$1</strong>')
-        // Italic
-        .replace(/\*(.*)\*/gim, '<em>$1</em>')
-        .replace(/_(.*?)_/gim, '<em>$1</em>')
-        // Code blocks
-        .replace(/```([\s\S]*?)```/gim, '<pre><code>$1</code></pre>')
-        // Inline code
-        .replace(/`([^`]*)`/gim, '<code>$1</code>')
-        // Links
-        .replace(/\[([^\]]*)\]\(([^\)]*)\)/gim, '<a href="$2" target="_blank">$1</a>')
-        // Line breaks
-        .replace(/\n/gim, '<br>');
-    
-    return html;
+    return md.render(markdown);
 }
 
 app.extensionManager.registerSidebarTab({
@@ -59,7 +84,8 @@ app.extensionManager.registerSidebarTab({
             line-height: 1.6;
           ">
             <div style="color: #888; font-style: italic; margin-bottom: 10px;">
-              Welcome to X-FluxAgent ChatBot! Ask me anything.
+              Welcome to X-FluxAgent ChatBot! 🤖<br>
+              <small>Ask me anything - I support <strong>markdown</strong> formatting and <code>syntax highlighting</code>!</small>
             </div>
           </div>
           
@@ -110,6 +136,8 @@ app.extensionManager.registerSidebarTab({
         </div>
         
         <style>
+          @import url('https://cdn.jsdelivr.net/npm/highlight.js@11.11.1/styles/github-dark.css');
+          
           @keyframes pulse {
             from { opacity: 0.6; }
             to { opacity: 1; }
@@ -124,24 +152,113 @@ app.extensionManager.registerSidebarTab({
           #chat-messages h2 { font-size: 1.3em; }
           #chat-messages h3 { font-size: 1.1em; }
           
-          #chat-messages code {
-            background: #333;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+          /* Code highlighting styles */
+          .code-block-container {
+            position: relative;
+            margin: 12px 0;
+          }
+          
+          .code-lang-label {
+            background: #21262d;
+            color: #7d8590;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            border: 1px solid #30363d;
+            border-bottom: none;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
           }
           
           #chat-messages pre {
-            background: #333;
-            padding: 10px;
-            border-radius: 5px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
             overflow-x: auto;
-            margin: 10px 0;
+            margin: 0;
+            padding: 0;
+          }
+          
+          .code-lang-label + #chat-messages pre,
+          .code-lang-label + pre {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border-top: none;
+          }
+          
+          #chat-messages pre.hljs {
+            background: #0d1117;
+            color: #e6edf3;
+            padding: 16px;
+            border-radius: 6px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.45;
+            margin: 0;
+          }
+          
+          #chat-messages code {
+            background: #262c36;
+            color: #f0f6fc;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 85%;
           }
           
           #chat-messages pre code {
             background: none;
             padding: 0;
+            border-radius: 0;
+            color: inherit;
+            font-size: inherit;
+          }
+          
+          /* Tables */
+          #chat-messages table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 12px 0;
+          }
+          
+          #chat-messages th, #chat-messages td {
+            border: 1px solid #444;
+            padding: 8px 12px;
+            text-align: left;
+          }
+          
+          #chat-messages th {
+            background: #333;
+            font-weight: bold;
+          }
+          
+          /* Lists */
+          #chat-messages ul, #chat-messages ol {
+            margin: 8px 0;
+            padding-left: 24px;
+          }
+          
+          #chat-messages li {
+            margin: 4px 0;
+          }
+          
+          /* Blockquotes */
+          #chat-messages blockquote {
+            border-left: 4px solid #007acc;
+            margin: 12px 0;
+            padding: 8px 16px;
+            background: #1a1a1a;
+            color: #ccc;
+          }
+          
+          /* Horizontal rules */
+          #chat-messages hr {
+            border: none;
+            border-top: 1px solid #444;
+            margin: 16px 0;
           }
           
           #chat-messages strong {
@@ -189,6 +306,34 @@ app.extensionManager.registerSidebarTab({
             color: white;
             margin-left: 0;
             margin-right: auto;
+          }
+          
+          /* Copy button for code blocks */
+          .code-block-wrapper {
+            position: relative;
+          }
+          
+          .copy-button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #f0f6fc;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.2s;
+          }
+          
+          .code-block-wrapper:hover .copy-button {
+            opacity: 1;
+          }
+          
+          .copy-button:hover {
+            background: #30363d;
           }
         </style>
       `;
@@ -247,6 +392,11 @@ app.extensionManager.registerSidebarTab({
       
       if (type === 'ai' || type === 'error') {
         messageDiv.innerHTML = markdownToHtml(message);
+        
+        // Add copy buttons to code blocks
+        if (type === 'ai') {
+          addCopyButtonsToCodeBlocks(messageDiv);
+        }
       } else {
         messageDiv.textContent = message;
       }
@@ -257,6 +407,46 @@ app.extensionManager.registerSidebarTab({
       if (!userScrolledUp) {
         messageContainer.scrollTop = messageContainer.scrollHeight;
       }
+    }
+    
+    // Add copy buttons to code blocks
+    function addCopyButtonsToCodeBlocks(container) {
+      const codeContainers = container.querySelectorAll('.code-block-container');
+      codeContainers.forEach(codeContainer => {
+        const codeBlock = codeContainer.querySelector('pre.hljs');
+        if (!codeBlock) return;
+        
+        // Create wrapper for positioning
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-block-wrapper';
+        
+        // Create copy button
+        const copyButton = document.createElement('button');
+        copyButton.className = 'copy-button';
+        copyButton.textContent = 'Copy';
+        copyButton.onclick = () => {
+          const code = codeBlock.querySelector('code');
+          if (code) {
+            navigator.clipboard.writeText(code.textContent).then(() => {
+              copyButton.textContent = 'Copied!';
+              setTimeout(() => {
+                copyButton.textContent = 'Copy';
+              }, 2000);
+            }).catch(err => {
+              console.error('Failed to copy code:', err);
+              copyButton.textContent = 'Failed';
+              setTimeout(() => {
+                copyButton.textContent = 'Copy';
+              }, 2000);
+            });
+          }
+        };
+        
+        // Insert wrapper and move code container into it
+        codeContainer.parentNode.insertBefore(wrapper, codeContainer);
+        wrapper.appendChild(codeContainer);
+        wrapper.appendChild(copyButton);
+      });
     }
     
     // Show/hide loading indicator

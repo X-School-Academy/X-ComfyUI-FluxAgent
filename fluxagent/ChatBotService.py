@@ -46,7 +46,7 @@ class ChatBotService:
             # Default system message for chatbot
             messages.append({
                 "role": "system",
-                "content": "You are a helpful AI assistant. Respond concisely and helpfully."
+                "content": "You are a helpful AI assistant specialized in programming and technical topics. Respond concisely and helpfully. When providing code examples, use proper markdown code blocks with language specification for syntax highlighting. Feel free to use markdown formatting like **bold**, *italics*, `inline code`, lists, and tables when appropriate."
             })
 
         # Add user message
