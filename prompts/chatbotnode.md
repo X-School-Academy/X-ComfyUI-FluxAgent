@@ -110,4 +110,32 @@ So user can test the code in place without to create a new workflow
 
 ### LangGraph powered ComfyUI workflow coding agent 
 
+1. the user will ask to create a project from the comfyui custom tab chatbot
+2. As the user is no coding knowledge, we need to have an agent to ask user for more clear what is the user's request 
+3. We only do workflow based python application in this stage, so if user ask to create other, we need user to know. for example: website, mobile app, or nodejs, C+ prject etc, but we can let user know we will suppor this later
+4. Once the agent think the has enough information, then we will create a draft design specification for user to review. we will show the design specification in the first comfyUI node: AICodeGenNode
+ - draft design specification using AICodeGenNode
+ - it will created by the bot automatically for a tool call - the tool call will send event to webUI, and the web UI have a function to create node
+ - the node has 
+   * default project name: project_01
+   * default project path: project_01 under custom_nodes/X-FLuxAgent/user/generated
+   * show the design specification markdown code in the rich text area, user can edit
+ - the design specification just use natural language to describe the logic for each functions/nodes will create
+5. the chat area will ask user to check and modify the design specification, once it is ok, click a continue button in the chat area
+6. Once user confirm to continue, another draft agent will will create information below
+
+  * each node's inputs, outputs and node description including the inputs, outputs description 
+  * the connections/links between each nodes
+  * the output should be a standard comfyUI workflow json structure
+7. ComfyUI workflow json structure validtion agent: check the syntax, and add the design specification node as the first start node, then add node size and position info to make sure each node not overlap each other
+If there is a sytax error, as AI to fix it
+8. Once the prompt comfyUI workflow json data finished and send to webUI and load/repalce with the whole current workflow.
+9. the chat bot will ask user to check each node's prompt, inputs and outputs. links logic, update it maually if need
+10. one the user confirm the workflow is OK, a compile agent will create each function and node code for each node with test code
+11. Tester agent will test each node's test code, and ask AI to fix it until success
+12. Chatbot will tell the user, all the code has tested and the user can execute the comfyui workflow run button to test in place, or create a new workflow with the newly created nodes
+13. Chatbot needs to report all the progress and status to the chatbot
+14. if the user find some error, they can modfiy the any node's prompt, inputs/outputs, links, then ask AI to do again - AI compile agent needs to update any related node's code and test case, not for any node not updated yet.
+
+
 
