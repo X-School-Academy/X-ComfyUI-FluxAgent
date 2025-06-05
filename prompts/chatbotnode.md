@@ -136,6 +136,6 @@ If there is a sytax error, as AI to fix it
 12. Chatbot will tell the user, all the code has tested and the user can execute the comfyui workflow run button to test in place, or create a new workflow with the newly created nodes
 13. Chatbot needs to report all the progress and status to the chatbot
 14. if the user find some error, they can modfiy the any node's prompt, inputs/outputs, links, then ask AI to do again - AI compile agent needs to update any related node's code and test case, not for any node not updated yet.
-
+15. LLM online search - for any error - syntax if the compile ai agent cannot fix it, it can use LLM's internet search tool to check the latest or different version sdk/api etc
 
 
