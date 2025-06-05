@@ -6,7 +6,7 @@ class AICodeGenNode:
             "required": {
             },
             "optional": {
-                "rich_text": ("X-FluxAgent.RichTextWidget", {"default": "Your code", "readOnly": True}),
+                "rich_text": ("X-FluxAgent.RichTextWidget", {"default": "\n\n", "readOnly": True}),
             },
             "hidden": {
                 "node_id": "UNIQUE_ID",
